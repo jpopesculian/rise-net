@@ -152,7 +152,12 @@ ENV LD_LIBRARY_PATH="$HOME/postgres/lib:$HOME/out/lib:$LD_LIBRARY_PATH"
 
 ARG RISE_DIR=core
 ARG RISE_URL=https://github.com/RiseVision/rise-node.git
+ARG VERSION=1.2.0
+
 RUN git clone $RISE_URL $RISE_DIR
+RUN cd $RISE_DIR && \
+    git checkout tags/v$VERSION -b docker-versioned-$VERSION && \
+    git log -1 --format="%h" | tee build
 
 RUN cp -a core/ out/ && \
     mv out/core out/src && \
@@ -178,6 +183,15 @@ RUN ln -s $HOME/out/data/pg/postmaster.pid $HOME/out/pids/pg.pid
 
 # Install Rise Node
 
+ARG NETWORK="mainnet"
+RUN echo $NETWORK | tee out/etc/.network
 RUN cd out && ./manager.sh
 
-CMD ["bash"]
+# Copy run script
+
+COPY ./run.sh ./run.sh
+
+EXPOSE 5555
+
+ENTRYPOINT ["./run.sh"]
+CMD ["start"]

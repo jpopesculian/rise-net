@@ -1,0 +1,7 @@
+{
+  "extends": [
+    "tslint:latest",
+    "@oclif/tslint",
+    "tslint-config-prettier"
+  ]
+}
