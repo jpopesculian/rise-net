@@ -7,7 +7,16 @@ export default class NodeStart extends Command {
 
   static flags = {
     help: flags.help({ char: "h" }),
-    port: flags.integer({ char: "p", description: "API port", default: 5555 })
+    port: flags.integer({ char: "p", description: "API port", default: 5555 }),
+    configFile: flags.string({
+      char: "c",
+      description: "path of node configuration file"
+    }),
+    network: flags.string({
+      char: "n",
+      description: "Network",
+      default: "mainnet"
+    })
   };
 
   static args = [{ name: "file" }];

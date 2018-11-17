@@ -2,6 +2,7 @@
 
 cd out
 rm data/pg/postmaster.pid 2> /dev/null
+sudo chown $(whoami):$(whoami) etc
 
 do_help() {
     echo "Help for RISE Node Container:"

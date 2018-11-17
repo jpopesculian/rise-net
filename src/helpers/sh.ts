@@ -3,9 +3,8 @@ import * as _ from "lodash";
 import { parseArgsStringToArgv } from "string-argv";
 
 import { cleanup } from "./cleanup";
-import { dummyLogger, ILogger } from "./logger";
 
-export const sh = (logger: ILogger = dummyLogger) => (
+export const sh = (
   strings: TemplateStringsArray,
   ...values: any[]
 ): Promise<number> => {
@@ -18,24 +17,26 @@ export const sh = (logger: ILogger = dummyLogger) => (
   );
 
   return new Promise((resolve, reject) => {
-    const child = spawn(command, args);
+    const child = spawn(command, args, {
+      stdio: [process.stdin, process.stdout, process.stderr]
+    });
     cleanup(_code => {
+      if (child.stdin) {
+        child.stdin.write("\x03");
+      }
       child.kill("SIGINT");
     });
-    child.on("error", err => {
+    child.once("error", err => {
       reject(err);
     });
-    child.stdout.on("data", chunk => {
-      logger(chunk.toString());
-    });
-    child.stderr.on("data", chunk => {
-      logger(chunk.toString());
-    });
-    child.on("close", code => {
-      if (code !== 0) {
-        return reject(code);
+    child.once("close", code => {
+      switch (code) {
+        case 0:
+        case 2:
+        case 130:
+          return resolve(code);
       }
-      resolve(code);
+      return reject(new Error("Exit with error code: " + code));
     });
   });
 };
