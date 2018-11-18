@@ -3,7 +3,7 @@ import { Command, flags } from "@oclif/command";
 import { startNode } from "../../services/node/start";
 
 export default class NodeStart extends Command {
-  static description = "describe the command here";
+  static description = "Starts a Rise Node";
 
   static flags = {
     help: flags.help({ char: "h" }),
@@ -16,15 +16,19 @@ export default class NodeStart extends Command {
       char: "n",
       description: "Network",
       default: "mainnet"
+    }),
+    id: flags.string({
+      char: "i",
+      description: "An identifier for the running node",
+      default: "main"
     })
   };
 
-  static args = [{ name: "file" }];
-
   async run() {
     const { flags } = this.parse(NodeStart);
-    await startNode({
-      ...flags,
+    const { id, ...restFlags } = flags;
+    await startNode(id || "main", {
+      ...restFlags,
       logger: this.log.bind(this)
     });
   }
