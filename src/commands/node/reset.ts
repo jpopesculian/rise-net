@@ -1,5 +1,7 @@
 import { Command, flags } from "@oclif/command";
+import cli from "cli-ux";
 
+import { ID } from "../../helpers/constants/node/default-config";
 import { resetNode } from "../../services/node/reset";
 
 export default class NodeReset extends Command {
@@ -10,12 +12,14 @@ export default class NodeReset extends Command {
     id: flags.string({
       char: "i",
       description: "An identifier for the running node",
-      default: "main"
+      default: ID
     })
   };
 
   async run() {
     const { flags } = this.parse(NodeReset);
-    await resetNode(flags.id || "main");
+    cli.action.start("Removing data and log volumes");
+    await resetNode(flags.id || ID);
+    cli.action.stop();
   }
 }

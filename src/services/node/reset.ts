@@ -1,12 +1,7 @@
-import {
-  dataVolume,
-  logVolume,
-  prefixed
-} from "../../helpers/services/node/namespace";
-import { sh } from "../../helpers/sh";
+import { dataVolume, logVolume } from "../../helpers/services/node/namespace";
+import { shp } from "../../helpers/sh";
 
 export const resetNode = async (name: string) => {
-  const prefix = prefixed(name);
-  await sh`docker volume rm ${logVolume(prefix)}`;
-  await sh`docker volume rm ${dataVolume(prefix)}`;
+  await shp`docker volume rm ${logVolume(name)}`;
+  await shp`docker volume rm ${dataVolume(name)}`;
 };

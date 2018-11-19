@@ -10,10 +10,19 @@ do_help() {
     echo -e "\tmanager [command] <args> | access manager.sh"
 }
 
+start_all() {
+    ./manager.sh start all
+    tail -f logs/*
+}
+
+stop_all() {
+    ./manager.sh stop all
+}
+
 case $1 in
     "start")
-        ./manager.sh start all
-        tail -f logs/*
+        start_all
+        trap stop_all EXIT
         ;;
     "manager")
         ./manager.sh "${@:1}"
