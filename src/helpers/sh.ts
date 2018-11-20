@@ -18,9 +18,9 @@ const parseCommand = (
 };
 
 const killChild = (child: ChildProcess) => {
-  if (child.stdin) {
+  try {
     child.stdin.write("\x03");
-  }
+  } catch (e) {} // tslint:disable-line
   child.kill("SIGINT");
 };
 

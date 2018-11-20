@@ -4,3 +4,7 @@ export const NODE = `${HOME}/out`;
 export const CONFIG = `${NODE}/etc`;
 export const DATA = `${NODE}/data`;
 export const LOGS = `${NODE}/logs`;
+export const SRC = `${NODE}/src`;
+export const MODULES = `${SRC}/node_modules`;
+export const SRC_LOGS = `${SRC}/logs`;
+export const DOWNLOADS = `${HOME}/downloads`;

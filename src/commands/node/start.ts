@@ -1,15 +1,12 @@
 import { Command, flags } from "@oclif/command";
 
-import {
-  ID,
-  NETWORK,
-  PORT,
-  VERSION
-} from "../../helpers/constants/node/default-config";
+import { ID, NETWORK, PORT } from "../../helpers/constants/node/default-config";
 import { startNode } from "../../services/node/start";
 
+const LATEST = "latest";
+
 export default class NodeStart extends Command {
-  static description = "Starts a Rise Node";
+  static description = "Start a RISE Node";
 
   static flags = {
     help: flags.help({ char: "h" }),
@@ -31,13 +28,24 @@ export default class NodeStart extends Command {
     version: flags.string({
       char: "v",
       description: "Version to build",
-      default: VERSION
+      default: LATEST
+    }),
+    watch: flags.boolean({
+      char: "w",
+      description: "Watch src changes"
+    }),
+    src: flags.string({
+      char: "s",
+      description: "Directory of node src to mount"
     })
   };
 
   async run() {
     const { flags } = this.parse(NodeStart);
-    const { id, ...restFlags } = flags;
-    await startNode(id || ID, restFlags);
+    const { id, version, ...restFlags } = flags;
+    await startNode(id || ID, {
+      ...restFlags,
+      version: version === LATEST ? undefined : version
+    });
   }
 }

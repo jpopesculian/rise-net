@@ -1,3 +1,5 @@
+import { getVersion, setVersion } from "../../../db/node/version";
+import { buildNode } from "../../../services/node/build";
 import { VERSION } from "../../constants/node/default-config";
 import { shp } from "../../sh";
 
@@ -18,4 +20,18 @@ export const hasVersionImage = async (version: string): Promise<boolean> => {
     return true;
   }
   return false;
+};
+
+export const initContainerImage = async (
+  name: string,
+  version?: string
+): Promise<string> => {
+  if (!version) {
+    version = getVersion(name) || VERSION;
+  }
+  if (!await hasVersionImage(version)) {
+    await buildNode(version);
+  }
+  setVersion(name, version);
+  return version;
 };

@@ -3,8 +3,6 @@ import * as path from "path";
 import * as tmp from "tmp-promise";
 import { promisify } from "util";
 
-const asyncNcp = promisify(ncp);
-
 export const createConfigDir = async (): Promise<string> => {
   const defaultConfigDir = path.join(
     __dirname,
@@ -18,8 +16,9 @@ export const createConfigDir = async (): Promise<string> => {
   );
   const tmpDir = (await tmp.dir({
     mode: 0o777,
-    prefix: "rise_config_"
+    prefix: "rise_config_",
+    unsafeCleanup: true
   })).path;
-  await asyncNcp(defaultConfigDir, tmpDir);
+  await promisify(ncp)(defaultConfigDir, tmpDir);
   return tmpDir;
 };

@@ -125,7 +125,10 @@ RUN curl -o node.tar.gz -J -L $NODE_URL && \
     mv node-v${NODE_VERSION}-linux-x64 node;
 
 # Install npm libraries
-RUN export PATH="$HOME/node/bin:$PATH" && node/bin/npm install -g pm2
+RUN export PATH="$HOME/node/bin:$PATH" && node/bin/npm install -g \
+    pm2 \
+    typescript \
+    tsc-then
 
 RUN cp -a ./node/lib/node_modules ./out/lib && \
     cp -a ./node/bin/* ./out/bin

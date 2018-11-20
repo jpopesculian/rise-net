@@ -2,6 +2,8 @@ import { writeFileSync } from "fs";
 import { isEmpty, merge } from "lodash";
 import * as path from "path";
 
+import { toAbsolutePath } from "../../to-absolute-path";
+
 export const createNodeConfigFromFile = async (
   configDir: string,
   filename?: string
@@ -9,18 +11,13 @@ export const createNodeConfigFromFile = async (
   if (!filename || isEmpty(filename)) {
     return;
   }
-  let config = await import(path.join(configDir, "node_config.json"));
-  const filepath = path.isAbsolute(filename)
-    ? filename
-    : path.join(process.cwd(), filename);
-  const importedConfig = await import(filepath);
+  const configFile = path.join(configDir, "node_config.json");
+  let config = await import(configFile);
+  const importedConfig = await import(toAbsolutePath(filename));
   const configObj = isEmpty(importedConfig.default)
     ? importedConfig
     : importedConfig.default;
   config = merge(config, configObj);
 
-  writeFileSync(
-    path.join(configDir, "node_config.json"),
-    JSON.stringify(config)
-  );
+  writeFileSync(configFile, JSON.stringify(config));
 };

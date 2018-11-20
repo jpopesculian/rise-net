@@ -1,9 +1,5 @@
 #!/bin/bash
 
-cd out
-rm data/pg/postmaster.pid 2> /dev/null
-sudo chown $(whoami):$(whoami) etc
-
 do_help() {
     echo "Help for RISE Node Container:"
     echo -e "\tstart                    | alias for 'manager start all'"
@@ -15,17 +11,22 @@ start_all() {
     tail -f logs/*
 }
 
-stop_all() {
-    ./manager.sh stop all
-}
+cd out
+rm data/pg/postmaster.pid 2> /dev/null
+sudo chown $(whoami):$(whoami) etc
 
 case $1 in
     "start")
         start_all
-        trap stop_all EXIT
+        ;;
+    "dev")
+        cd src
+        npm install --no-package-lock
+        cd ../
+        start_all
         ;;
     "manager")
-        ./manager.sh "${@:1}"
+        ./manager.sh "${@:2}"
         ;;
     *)
         do_help

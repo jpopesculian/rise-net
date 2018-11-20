@@ -19,7 +19,7 @@ export default class NodeReset extends Command {
   async run() {
     const { flags } = this.parse(NodeReset);
     cli.action.start("Removing data and log volumes");
-    await resetNode(flags.id || ID);
+    await resetNode(flags.id || ID, this.log);
     cli.action.stop();
   }
 }

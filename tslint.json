@@ -3,5 +3,8 @@
     "tslint:latest",
     "@oclif/tslint",
     "tslint-config-prettier"
-  ]
+  ],
+  "rules": {
+    "no-submodule-imports": false
+  }
 }
