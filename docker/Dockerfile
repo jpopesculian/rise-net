@@ -1,7 +1,9 @@
 FROM ubuntu:18.04
 
 ARG coin=rise
-ARG HOME=/home/$coin
+ENV HOME=/home/$coin
+ARG USER_ID=1000
+ARG GROUP_ID=1000
 
 ARG NODE_VERSION=8.11.1
 ARG NODE_URL=https://nodejs.org/download/release/v$NODE_VERSION/node-v$NODE_VERSION-linux-x64.tar.gz
@@ -42,6 +44,7 @@ RUN apt-get install -y -qq \
         automake \
         bison \
         build-essential \
+        ca-certificates \
         chrpath \
         cron \
         curl \
@@ -59,9 +62,11 @@ RUN apt-get install -y -qq \
         zlib1g-dev
 
 # Setup user
+
 WORKDIR $HOME
-RUN groupadd -r $coin && \
-    useradd --no-log-init -r -g $coin $coin && \
+
+RUN groupadd -r -g $GROUP_ID $coin &&\
+    useradd --no-log-init -r -u $USER_ID -g $coin $coin && \
     chown $coin:$coin -R . && \
     usermod -aG sudo $coin && \
     echo "$coin ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers.d/$coin
@@ -81,6 +86,14 @@ RUN mkdir -p \
 
 ### BUILD NODE DEPS ###
 
+RUN gpg --keyserver ha.pool.sks-keyservers.net --recv-keys B42F6819007F00F88E364FD4036A9C25BF357DD4
+RUN curl -o gosu -SL "https://github.com/tianon/gosu/releases/download/1.4/gosu-$(dpkg --print-architecture)" && \
+    curl -o gosu.asc -SL "https://github.com/tianon/gosu/releases/download/1.4/gosu-$(dpkg --print-architecture).asc" && \
+    gpg --verify gosu.asc && \
+    rm gosu.asc && \
+    sudo mv gosu /usr/local/bin/gosu && \
+    sudo chmod +x /usr/local/bin/gosu
+
 # Build PostGres
 RUN curl -o postgres.tar.gz $POSTGRES_URL && \
     tar -zxf postgres.tar.gz && \
@@ -93,7 +106,9 @@ RUN cd $POSTGRES_DIR && \
     cd contrib/pgcrypto && \
     make && make install
 
-RUN cp -a postgres/{lib,bin,share} out/
+RUN cp -a postgres/lib out/ && \
+    cp -a postgres/bin out/ && \
+    cp -a postgres/share out/
 
 # Build Redis
 RUN curl -o redis.tar.gz $REDIS_URL && \
@@ -104,7 +119,8 @@ RUN curl -o redis.tar.gz $REDIS_URL && \
 RUN cd redis && \
     make -j $PARALLEL_MAKE_JOBS
 
-RUN cp -a redis/src/{redis-cli,redis-server} out/bin
+RUN cp -a redis/src/redis-cli out/bin && \
+    cp -a redis/src/redis-server out/bin
 
 # # Build jq binary -> https://github.com/stedolan/jq/
 RUN curl -o jq.tar.gz -J -L $JQ_URL && \
@@ -128,7 +144,9 @@ RUN curl -o node.tar.gz -J -L $NODE_URL && \
 RUN export PATH="$HOME/node/bin:$PATH" && node/bin/npm install -g \
     pm2 \
     typescript \
-    tsc-then
+    lerna \
+    chokidar-cli \
+    yarn
 
 RUN cp -a ./node/lib/node_modules ./out/lib && \
     cp -a ./node/bin/* ./out/bin
@@ -168,9 +186,10 @@ RUN cp -a core/ out/ && \
 
 # Build Rise Node
 
+COPY ./bootstrap-node /usr/local/bin/bootstrap-node
 RUN cd out/src && \
     rm -rf node_modules && \
-    npm install && \
+    /usr/local/bin/bootstrap-node . && \
     npm run transpile && \
     npm prune  --production >> /dev/null
 
@@ -192,9 +211,10 @@ RUN cd out && ./manager.sh
 
 # Copy run script
 
-COPY ./run.sh ./run.sh
+COPY ./run-node /usr/local/bin/run-node
+COPY ./entrypoint.sh ./entrypoint.sh
 
 EXPOSE 5555
 
-ENTRYPOINT ["./run.sh"]
-CMD ["start"]
+ENTRYPOINT ["./entrypoint.sh"]
+CMD ["/usr/local/bin/run-node", "start"]

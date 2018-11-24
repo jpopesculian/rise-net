@@ -11,9 +11,8 @@ start_all() {
     tail -f logs/*
 }
 
+ORIGIN=$(pwd)
 cd out
-rm data/pg/postmaster.pid 2> /dev/null
-sudo chown $(whoami):$(whoami) etc
 
 case $1 in
     "start")
@@ -21,7 +20,9 @@ case $1 in
         ;;
     "dev")
         cd src
-        npm install --no-package-lock
+        BOOTSTRAP="$HOME/bootstrap.sh $HOME/out/src"
+        SHELL=/bin/sh chokidar "{,!(node_modules)/**/}package.json" -p -c $BOOTSTRAP &
+        eval $BOOTSTRAP
         cd ../
         start_all
         ;;
@@ -32,3 +33,5 @@ case $1 in
         do_help
         ;;
 esac
+
+cd $ORIGIN

@@ -7,6 +7,9 @@ import {
   createDockerMountFlags
 } from "../../helpers/services/node/create-docker-mount-flags";
 import {
+    createLocalUserIdFlag
+} from '../../helpers/services/node/create-local-user-id-flag';
+import {
   imageName,
   initContainerImage
 } from "../../helpers/services/node/image-version";
@@ -40,13 +43,13 @@ export const startNode = async (
   return sh`docker run -it --rm
     -p ${port}:${PORT}
     --name "${prefixed(name)}"
+    ${await createLocalUserIdFlag({ src })}
     ${hasSrc ? `--mount "type=bind,src=${toAbsolutePath(src!)},dst=${SRC}"` : ""}
     ${createDockerMountFlags(name, await buildConfigDir({
       network,
       configFile,
       watch
     }))}
-    --entrypoint bash
-    ${imageName(version)}`
+    ${imageName(version)} run-node start`
     // ${hasSrc ? "dev" : ""}`;
 };

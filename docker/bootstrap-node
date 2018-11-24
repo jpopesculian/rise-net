@@ -1,0 +1,15 @@
+#!/bin/bash
+
+DIR=$1
+ORIGIN=$(pwd)
+
+cd $DIR
+
+if [ -f 'lerna.json' ]; then
+    lerna link
+    lerna bootstrap
+else
+    npm install --no-package-lock
+fi
+
+cd $ORIGIN
