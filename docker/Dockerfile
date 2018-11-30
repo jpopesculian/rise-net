@@ -6,7 +6,6 @@ ARG USER_ID=1000
 ARG GROUP_ID=1000
 
 ARG NODE_VERSION=8.11.1
-ARG NODE_URL=https://nodejs.org/download/release/v$NODE_VERSION/node-v$NODE_VERSION-linux-x64.tar.gz
 
 ARG PARALLEL_MAKE_JOBS=4
 
@@ -53,6 +52,7 @@ RUN apt-get install -y -qq \
         libncurses5-dev \
         libonig-dev \
         libpopt-dev \
+        libpq-dev \
         libreadline6-dev \
         libsodium-dev \
         libssl-dev \
@@ -72,6 +72,7 @@ RUN groupadd -r -g $GROUP_ID $coin &&\
     echo "$coin ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers.d/$coin
 
 USER $coin
+RUN touch .bashrc
 SHELL ["/bin/bash", "-c"]
 
 # Make folder structure
@@ -135,21 +136,21 @@ RUN cd jq && \
 RUN cp -a jq/jq out/bin
 
 # Build nodejs
-RUN curl -o node.tar.gz -J -L $NODE_URL && \
-    tar -zxf node.tar.gz && \
-    rm node.tar.gz && \
-    mv node-v${NODE_VERSION}-linux-x64 node;
+ENV NVM_DIR=$HOME/.nvm
+RUN mkdir -p $NVM_DIR
+RUN curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash
+RUN source $NVM_DIR/nvm.sh && \
+    nvm install $NODE_VERSION && \
+    nvm use $NODE_VERSION
 
 # Install npm libraries
-RUN export PATH="$HOME/node/bin:$PATH" && node/bin/npm install -g \
-    pm2 \
+ENV GLOBAL_NODE_DEPS="pm2 \
     typescript \
     lerna \
     chokidar-cli \
-    yarn
-
-RUN cp -a ./node/lib/node_modules ./out/lib && \
-    cp -a ./node/bin/* ./out/bin
+    yarn"
+RUN source $NVM_DIR/nvm.sh && \
+    npm install --verbose -g $GLOBAL_NODE_DEPS
 
 # Build logrotate
 RUN curl -o logrotate.tar.gz -J -L $LOGROTATE_URL && \
@@ -186,11 +187,12 @@ RUN cp -a core/ out/ && \
 
 # Build Rise Node
 
+COPY ./load-nvm /usr/local/bin/load-nvm
 COPY ./bootstrap-node /usr/local/bin/bootstrap-node
 RUN cd out/src && \
     rm -rf node_modules && \
+    source $NVM_DIR/nvm.sh && \
     /usr/local/bin/bootstrap-node . && \
-    npm run transpile && \
     npm prune  --production >> /dev/null
 
 # Copy build assets
@@ -213,6 +215,7 @@ RUN cd out && ./manager.sh
 
 COPY ./run-node /usr/local/bin/run-node
 COPY ./entrypoint.sh ./entrypoint.sh
+
 
 EXPOSE 5555
 

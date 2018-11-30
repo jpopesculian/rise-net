@@ -11,7 +11,7 @@ interface ICreateLocalUserIdFlag {
 export const createLocalUserIdFlag = async ({
   src,
   ...idArgs
-}: ICreateLocalUserIdFlag): Promise<string> => {
+}: ICreateLocalUserIdFlag = {}): Promise<string> => {
   if (!(idArgs.userId && idArgs.groupId)) {
     idArgs = merge(
       await (isEmpty(src)

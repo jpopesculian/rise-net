@@ -1,0 +1,17 @@
+#!/bin/bash
+
+source $NVM_DIR/nvm.sh
+
+nvmrc="$1/.nvmrc"
+
+if [ -f "$nvmrc" ]; then
+    nvm install $(cat "$nvmrc")
+    uninstalled_global_deps=""
+    installed_deps=$(npm list --depth 0 --global)
+    for dep in $GLOBAL_NODE_DEPS; do
+        uninstalled_global_deps="$uninstalled_global_deps $(echo $installed_deps | grep -v $dep > /dev/null 2>&1 && echo $dep)"
+    done
+    if [[ $uninstalled_global_deps = *[!\ ]* ]]; then
+        npm install -g $uninstalled_global_deps
+    fi
+fi

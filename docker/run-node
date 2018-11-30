@@ -11,8 +11,26 @@ start_all() {
     tail -f logs/*
 }
 
+POSITIONAL=()
+while [[ $# -gt 0 ]]
+do
+key="$1"
+
+case $key in
+    -w|--watch)
+    WATCH="YES"
+    shift
+    ;;
+    *)
+    POSITIONAL+=("$1")
+    shift
+    ;;
+esac
+done
+set -- "${POSITIONAL[@]}" # restore positional parameters
+
 ORIGIN=$(pwd)
-cd out
+cd $HOME/out
 
 case $1 in
     "start")
@@ -20,9 +38,12 @@ case $1 in
         ;;
     "dev")
         cd src
-        BOOTSTRAP="$HOME/bootstrap.sh $HOME/out/src"
-        SHELL=/bin/sh chokidar "{,!(node_modules)/**/}package.json" -p -c $BOOTSTRAP &
-        eval $BOOTSTRAP
+        BOOTSTRAP="bootstrap-node $HOME/out/src"
+        source $BOOTSTRAP
+        if [ $WATCH = "YES" ]; then
+            echo "Bootstrapping node on dependency changes..."
+            SHELL=/bin/sh chokidar "$HOME/out/src/{,!(node_modules)/**/}package.json" -p -c "$BOOTSTRAP" &
+        fi
         cd ../
         start_all
         ;;

@@ -5,11 +5,22 @@ ORIGIN=$(pwd)
 
 cd $DIR
 
-if [ -f 'lerna.json' ]; then
-    lerna link
-    lerna bootstrap
+source load-nvm .
+
+if [ -f 'yarn.lock' ]; then
+    NPM_CLIENT="yarn"
 else
-    npm install --no-package-lock
+    NPM_CLIENT="npm"
 fi
+
+echo "Installing dependencies..."
+eval "$NPM_CLIENT install --verbose"
+
+if [ -f 'lerna.json' ]; then
+    lerna bootstrap
+fi
+
+echo "Transpiling typescript..."
+eval "$NPM_CLIENT run transpile"
 
 cd $ORIGIN

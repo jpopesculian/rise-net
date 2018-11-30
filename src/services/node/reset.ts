@@ -3,6 +3,7 @@ import {
   dataVolume,
   logVolume,
   modulesVolume,
+  nvmVolume,
   srcLogsVolume
 } from "../../helpers/services/node/namespace";
 import { shp } from "../../helpers/sh";
@@ -28,5 +29,6 @@ export const resetNode = async (
   await removeVolume(logVolume(name), "logs", logger);
   await removeVolume(srcLogsVolume(name), "src logs", logger);
   await removeVolume(modulesVolume(name), "modules", logger);
+  await removeVolume(nvmVolume(name), "global modules", logger);
   await removeVolume(dataVolume(name), "data", logger);
 };

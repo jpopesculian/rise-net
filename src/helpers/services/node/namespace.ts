@@ -4,6 +4,7 @@ import {
   DATA,
   LOGS,
   MODULES,
+  NVM,
   PREFIX,
   SRC_LOGS
 } from "../../constants/node/namespace";
@@ -26,4 +27,8 @@ export const modulesVolume = (name: string) => {
 
 export const srcLogsVolume = (name: string) => {
   return `${prefixed(name)}-${SRC_LOGS}`;
+};
+
+export const nvmVolume = (name: string) => {
+  return `${prefixed(name)}-${NVM}`;
 };

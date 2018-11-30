@@ -50,6 +50,7 @@ export const startNode = async (
       configFile,
       watch
     }))}
-    ${imageName(version)} run-node start`
-    // ${hasSrc ? "dev" : ""}`;
+    ${imageName(version)}
+    run-node ${hasSrc ? "dev" : "start"} ${watch ? "--watch" : ""}`;
+    // bash`;
 };

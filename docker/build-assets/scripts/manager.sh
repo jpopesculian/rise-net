@@ -41,7 +41,11 @@ config() {
         rm ${NETWORK_FILE}
         exit 2
     fi
-    CONFIG_PATH="$(pwd)/src/etc/${NETWORK}/config.json"
+    if [ -f "$(pwd)/src/lerna.json" ]; then
+        CONFIG_PATH="$(pwd)/src/packages/rise/etc/${NETWORK}/config.json"
+    else
+        CONFIG_PATH="$(pwd)/src/etc/${NETWORK}/config.json"
+    fi
 	LOGS_DIR="$(pwd)/logs"
     SH_LOG_FILE="$LOGS_DIR/shell.out"
 
