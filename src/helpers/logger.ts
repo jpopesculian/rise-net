@@ -1,5 +1,5 @@
-export type ILogger = (str: string) => void;
+import { ILogger } from "./types/logger";
 
-export const dummyLogger = (_str: string) => {
+export const dummyLogger: ILogger = (..._args: any[]) => {
   return;
 };

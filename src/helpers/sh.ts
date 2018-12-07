@@ -84,3 +84,7 @@ export const shp = (
     });
   });
 };
+
+export const escapeSh = (str: string): string => {
+  return '"' + str.replace(/(["])/g, "\\$1") + '"';
+};

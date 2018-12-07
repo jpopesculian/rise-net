@@ -3,8 +3,6 @@ import { Command, flags } from "@oclif/command";
 import { ID } from "../../helpers/constants/node/default-config";
 import { attachNode } from "../../services/node/attach";
 
-const LATEST = "latest";
-
 export default class NodeAttach extends Command {
   static description = "Attach a RISE Node";
 

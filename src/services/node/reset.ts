@@ -1,4 +1,4 @@
-import { dummyLogger, ILogger } from "../../helpers/logger";
+import { dummyLogger } from "../../helpers/logger";
 import {
   dataVolume,
   logVolume,
@@ -7,6 +7,7 @@ import {
   srcLogsVolume
 } from "../../helpers/services/node/namespace";
 import { shp } from "../../helpers/sh";
+import { ILogger } from "../../helpers/types/logger";
 
 const removeVolume = async (
   volumeName: string,

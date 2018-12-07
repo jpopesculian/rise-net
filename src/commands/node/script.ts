@@ -5,10 +5,10 @@ import {
   stripLatestVersion
 } from "../../helpers/commands/node/version";
 import { ID, NETWORK, PORT } from "../../helpers/constants/node/default-config";
-import { startNode } from "../../services/node/start";
+import { scriptNode } from "../../services/node/script";
 
-export default class NodeStart extends Command {
-  static description = "Start a RISE Node";
+export default class NodeScript extends Command {
+  static description = "Run a Node.js script in a container";
 
   static flags = {
     help: flags.help({ char: "h" }),
@@ -32,24 +32,22 @@ export default class NodeStart extends Command {
       description: "Version to build",
       default: LATEST_VERSION
     }),
-    watch: flags.boolean({
-      char: "w",
-      description: "Watch src changes"
-    }),
     src: flags.string({
       char: "s",
       description: "Directory of node src to mount"
     }),
-    entry: flags.string({
-      char: "e",
-      description: "Node entry for pm2"
+    args: flags.string({
+      char: "a",
+      description: "Arguments to give node script"
     })
   };
 
+  static args = [{ name: "FILE", required: true }];
+
   async run() {
-    const { flags } = this.parse(NodeStart);
+    const { flags, args } = this.parse(NodeScript);
     const { id, version, ...restFlags } = flags;
-    await startNode(id || ID, {
+    await scriptNode(args.FILE, id || ID, {
       ...restFlags,
       version: stripLatestVersion(version)
     });

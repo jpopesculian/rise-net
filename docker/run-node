@@ -7,11 +7,14 @@ do_help() {
 }
 
 start_all() {
+    source load-nvm ./src
     ./manager.sh start all
     tail -f logs/*
 }
 
 POSITIONAL=()
+WATCH="NO"
+
 while [[ $# -gt 0 ]]
 do
 key="$1"
@@ -46,6 +49,13 @@ case $1 in
         fi
         cd ../
         start_all
+        ;;
+    "script")
+        source load-nvm ./src
+        ./manager.sh start db 2>&1 >/dev/null
+        ./manager.sh start redis 2>&1 >/dev/null
+        cd ./src
+        echo "$2" | node - "${@:3}" 2> /dev/null
         ;;
     "manager")
         ./manager.sh "${@:2}"

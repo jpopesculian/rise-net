@@ -1,3 +1,6 @@
+import { ILogger } from "./logger";
+
 export interface ICommandFlags {
-  help?: void
+  help?: void,
+  logger?: ILogger
 }

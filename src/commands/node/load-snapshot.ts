@@ -1,11 +1,13 @@
 import { Command, flags } from "@oclif/command";
 
+import {
+  LATEST_VERSION,
+  stripLatestVersion
+} from "../../helpers/commands/node/version";
 import { NETWORK } from "../../helpers/constants/node/default-config";
 import { loadSnapshot } from "../../services/node/load-snapshot";
 
-const LATEST = "latest";
-
-export default class NodeBuild extends Command {
+export default class NodeLoadSnapshot extends Command {
   static description = "Load a snapshot of the blockchain";
 
   static flags = {
@@ -22,16 +24,16 @@ export default class NodeBuild extends Command {
     version: flags.string({
       char: "v",
       description: "Version to build",
-      default: LATEST
+      default: LATEST_VERSION
     })
   };
 
   async run() {
-    const { flags } = this.parse(NodeBuild);
+    const { flags } = this.parse(NodeLoadSnapshot);
     const { version, ...restFlags } = flags;
     await loadSnapshot({
       ...restFlags,
-      version: version === LATEST ? undefined : version
+      version: stripLatestVersion(version)
     });
   }
 }

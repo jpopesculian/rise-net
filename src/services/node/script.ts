@@ -1,6 +1,7 @@
+import { readFileSync } from "fs";
 import { isEmpty } from "lodash";
 
-import { NETWORK, PORT } from "../../helpers/constants/node/default-config";
+import { NETWORK } from "../../helpers/constants/node/default-config";
 import { SRC } from "../../helpers/constants/node/paths";
 import { buildConfigDir } from "../../helpers/services/node/build-config-dir";
 import {
@@ -14,36 +15,39 @@ import {
   initContainerImage
 } from "../../helpers/services/node/image-version";
 import { prefixed } from "../../helpers/services/node/namespace";
-import { sh } from "../../helpers/sh";
+import { escapeSh, sh } from "../../helpers/sh";
 import { toAbsolutePath } from "../../helpers/to-absolute-path";
 import { ICommandFlags } from "../../helpers/types/command-flags";
 
-interface INodeStartFlags extends ICommandFlags {
-  port?: number,
+interface INodeScriptFlags extends ICommandFlags {
   configFile?: string,
   network?: string,
   version?: string,
   watch?: boolean,
   src?: string,
-  entry?: string
+  entry?: string,
+  args?: string
 }
 
-export const startNode = async (
+export const scriptNode = async (
+  filename: string,
   name: string,
   {
-    port = PORT,
     network = NETWORK,
     version,
     configFile,
     watch,
     entry,
-    src
-  }: INodeStartFlags
+    src,
+    args
+  }: INodeScriptFlags
 ): Promise<number> => {
   const hasSrc = !isEmpty(src);
+  const scriptString = escapeSh(
+    readFileSync(toAbsolutePath(filename)).toString()
+  );
   version = await initContainerImage(name, version);
   return sh`docker run -it --rm
-    -p ${port}:${PORT}
     --name "${prefixed(name)}"
     ${await createLocalUserIdFlag({ src })}
     ${hasSrc ? `--mount "type=bind,src=${toAbsolutePath(src!)},dst=${SRC}"` : ""}
@@ -54,6 +58,5 @@ export const startNode = async (
       entry
     }))}
     ${imageName(version)}
-    bash`;
-  // run-node ${hasSrc ? "dev" : "start"} ${watch ? "--watch" : ""}`;
+    run-node script ${scriptString} ${args}`;
 };
