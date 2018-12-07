@@ -5,6 +5,7 @@ import {
   ID
 } from "../../helpers/constants/accounts/default-config";
 import { createAccounts } from "../../services/accounts/create";
+import { listAccounts } from "../../services/accounts/list";
 
 export default class AccountsCreate extends Command {
   static description = "Create a list of accounts";
@@ -31,6 +32,7 @@ export default class AccountsCreate extends Command {
   async run() {
     const { flags } = this.parse(AccountsCreate);
     const { id, ...restFlags } = flags;
-    await createAccounts(id || ID, { ...restFlags, logger: this.log });
+    await createAccounts(id || ID, restFlags);
+    await listAccounts(id || ID, { logger: this.log });
   }
 }

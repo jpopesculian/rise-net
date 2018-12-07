@@ -39,6 +39,10 @@ export default class NodeScript extends Command {
     args: flags.string({
       char: "a",
       description: "Arguments to give node script"
+    }),
+    out: flags.string({
+      char: "o",
+      description: "Save output to file"
     })
   };
 

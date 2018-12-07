@@ -1,5 +1,5 @@
 import { Rise } from "dpos-offline";
-import { filter, find, isString, map, merge, update } from "lodash/fp";
+import { filter, isString, map, merge, update } from "lodash/fp";
 
 import { IAccount } from "../../types/accounts";
 import { isDelegate } from "../accounts/account-type";
@@ -30,54 +30,45 @@ const generateSendTransaction = (
   recipient: IAccount,
   amount: number
 ) => {
-  return normalizeTx(
-    Rise.txs.createAndSign(
-      addExtraFields(
-        {
-          kind: "send",
-          amount,
-          recipient: recipient.address
-        },
-        sender
-      ),
-      sender.passphrase
+  const tx = Rise.txs.transform(
+    addExtraFields(
+      { kind: "send", amount, recipient: recipient.address },
+      sender
     )
   );
+  return normalizeTx(Rise.txs.sign(tx, sender.passphrase));
 };
 
 const generateDelegateTransaction = (account: IAccount) => {
-  return normalizeTx(
-    Rise.txs.createAndSign(
-      addExtraFields(
-        {
-          kind: "register-delegate",
-          identifier: account.username
-        },
-        account
-      ),
-      account.passphrase
+  const tx = Rise.txs.transform(
+    addExtraFields(
+      {
+        kind: "register-delegate",
+        identifier: account.username
+      },
+      account
     )
   );
+  return normalizeTx(Rise.txs.sign(tx, account.passphrase));
 };
 
 const generateVoteTransaction = (account: IAccount) => {
-  return normalizeTx(
-    Rise.txs.createAndSign(
-      addExtraFields(
-        {
-          kind: "vote",
-          preferences: [
-            {
-              delegateIdentifier: account.publicKey,
-              action: "+"
-            }
-          ]
-        },
-        account
-      ),
-      account.passphrase
+  const tx = Rise.txs.transform(
+    addExtraFields(
+      {
+        kind: "vote",
+        preferences: [
+          {
+            delegateIdentifier: account.publicKey,
+            action: "+"
+          }
+        ]
+      },
+      account
     )
   );
+  tx.recipientId = account.address;
+  return normalizeTx(Rise.txs.sign(tx, account.passphrase));
 };
 
 const generateSendTransactions = (
@@ -106,18 +97,17 @@ const generateVoteTransactions = (accounts: IAccount[]) => {
 };
 
 export const generateTransactions = (
+  genesisAccount: IAccount,
   accounts: IAccount[],
   totalAmount: number
 ) => {
-  const genesisAccount = find({ genesis: true }, accounts) || accounts[0];
-  const otherAccounts = filter({ genesis: false }, accounts);
   return [
     ...generateSendTransactions(
       genesisAccount,
-      otherAccounts,
-      totalAmount / otherAccounts.length
+      accounts,
+      totalAmount / accounts.length
     ),
-    ...generateDelegateTransactions(otherAccounts),
-    ...generateVoteTransactions(otherAccounts)
+    ...generateDelegateTransactions(accounts),
+    ...generateVoteTransactions(accounts)
   ];
 };
