@@ -12,7 +12,6 @@ export default class NodeScript extends Command {
 
   static flags = {
     help: flags.help({ char: "h" }),
-    port: flags.integer({ char: "p", description: "API port", default: PORT }),
     configFile: flags.string({
       char: "c",
       description: "path of node configuration file"
@@ -43,6 +42,10 @@ export default class NodeScript extends Command {
     out: flags.string({
       char: "o",
       description: "Save output to file"
+    }),
+    assets: flags.string({
+      char: "s",
+      description: 'Assets to bind to node (located at "./.scripts/assets")'
     })
   };
 

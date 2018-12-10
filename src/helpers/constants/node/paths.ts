@@ -8,4 +8,5 @@ export const SRC = `${NODE}/src`;
 export const MODULES = `${SRC}/node_modules`;
 export const NVM = `${HOME}/.nvm`;
 export const SRC_LOGS = `${SRC}/logs`;
+export const SCRIPTS = `${SRC}/.scripts`;
 export const DOWNLOADS = `${HOME}/downloads`;

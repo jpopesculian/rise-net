@@ -1,6 +1,7 @@
 import { filter, find, isEmpty } from "lodash/fp";
 
 import { getList } from "../../db/accounts/list";
+import { setGenesis } from "../../db/net/genesis";
 import { TOTAL_AMOUNT } from "../../helpers/constants/net/default-config";
 import { isGenesis } from "../../helpers/services/accounts/account-type";
 import {
@@ -20,7 +21,7 @@ interface IForgeGensisFlags extends ICommandFlags {
 export const forgeGenesis = async (
   id: string,
   { totalAmount = TOTAL_AMOUNT }: IForgeGensisFlags
-): Promise<string> => {
+): Promise<any> => {
   let accounts = getList(id);
   if (isEmpty(accounts)) {
     await createAccounts(id, {});
@@ -33,5 +34,7 @@ export const forgeGenesis = async (
     otherAccounts,
     totalAmount
   );
-  return generateGenesisBlock(transactions, genesisAccount);
+  const genesisBlock = await generateGenesisBlock(transactions, genesisAccount);
+  setGenesis(id, genesisBlock)
+  return genesisBlock
 };

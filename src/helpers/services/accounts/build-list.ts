@@ -4,11 +4,11 @@ import { castArray, isNumber, map, range, set, zipWith } from "lodash/fp";
 
 import { IAccount } from "../../types/accounts";
 
-const generateAccount = (): IAccount => {
+const generateAccount = (id: number): IAccount => {
   const passphrase = generateMnemonic();
   const { privateKey, publicKey } = Rise.deriveKeypair(passphrase);
   const address = Rise.calcAddress(publicKey);
-  return { passphrase, address, privateKey, publicKey, genesis: false };
+  return { id, passphrase, address, privateKey, publicKey, genesis: false };
 };
 
 const generateAccounts = (num: number): IAccount[] => {
@@ -28,7 +28,7 @@ const addUsernames = (
     (id, account): IAccount => {
       return isNumber(id) ? set("username", `delegate${id}`, account) : account;
     },
-    castArray(range(0, delegateNum)),
+    castArray(range(1, delegateNum + 1)),
     accounts
   );
 };

@@ -55,7 +55,7 @@ case $1 in
         ./manager.sh start db 2>&1 >/dev/null
         ./manager.sh start redis 2>&1 >/dev/null
         cd ./src
-        echo "$2" | node - "${@:3}" 2> /dev/null
+        cat ./.scripts/script.js | node - "${@:2}" 2> /dev/null
         ;;
     "manager")
         ./manager.sh "${@:2}"

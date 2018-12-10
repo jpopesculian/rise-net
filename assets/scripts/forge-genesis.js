@@ -13,7 +13,7 @@ const genesisBlock = require(`./etc/${network}/genesisBlock.json`);
 // ).apps[0];
 const versionBuild = fs.readFileSync('build').toString().trim();
 
-const blockConfig = JSON.parse(process.argv[2].split(/\\"/).join('"'));
+const blockConfig = require('./.scripts/assets/blockConfig.json');
 
 const buildAppManager = () => {
   const appConfig = helpers.config(`./etc/${network}/config.json`);

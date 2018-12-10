@@ -2,6 +2,7 @@ import { isEmpty } from "lodash";
 
 import { NETWORK, PORT } from "../../helpers/constants/node/default-config";
 import { SRC } from "../../helpers/constants/node/paths";
+import { findOrCreateNetwork } from "../../helpers/services/net/find-or-create-network";
 import { buildConfigDir } from "../../helpers/services/node/build-config-dir";
 import {
   createDockerMountFlags
@@ -25,7 +26,8 @@ interface INodeStartFlags extends ICommandFlags {
   version?: string,
   watch?: boolean,
   src?: string,
-  entry?: string
+  entry?: string,
+  daemon?: boolean
 }
 
 export const startNode = async (
@@ -37,23 +39,27 @@ export const startNode = async (
     configFile,
     watch,
     entry,
+    daemon,
     src
   }: INodeStartFlags
 ): Promise<number> => {
   const hasSrc = !isEmpty(src);
   version = await initContainerImage(name, version);
-  return sh`docker run -it --rm
+  return sh`docker run --rm
+    ${daemon ? "-d" : "-it"}
     -p ${port}:${PORT}
     --name "${prefixed(name)}"
+    --network "${await findOrCreateNetwork()}"
     ${await createLocalUserIdFlag({ src })}
     ${hasSrc ? `--mount "type=bind,src=${toAbsolutePath(src!)},dst=${SRC}"` : ""}
     ${createDockerMountFlags(name, await buildConfigDir({
       network,
       configFile,
       watch,
-      entry
+      entry,
+      preserve: !!daemon
     }))}
     ${imageName(version)}
-    bash`;
-  // run-node ${hasSrc ? "dev" : "start"} ${watch ? "--watch" : ""}`;
+    run-node ${hasSrc ? "dev" : "start"} ${watch ? "--watch" : ""}`;
+  // bash`;
 };

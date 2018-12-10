@@ -8,16 +8,18 @@ interface IConfigDirFlags {
   network: string,
   configFile?: string,
   watch?: boolean,
-  entry?: string
+  entry?: string,
+  preserve?: boolean
 }
 
 export const buildConfigDir = async ({
   network,
   configFile,
   watch,
-  entry
+  entry,
+  preserve
 }: IConfigDirFlags): Promise<string> => {
-  const configDir = await createConfigDir();
+  const configDir = await createConfigDir(!!preserve);
   await createNodeConfigFromFile(configDir, configFile);
   await createNetworkFile(configDir, network);
   await addWatchFlagToConfig(configDir, network, watch);

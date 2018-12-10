@@ -1,0 +1,319 @@
+[
+    {
+        "Id": "05134be293fdca816e46a10500b898862ebf6f5df8f9bda80d73be9ee3b54626",
+        "Created": "2018-12-10T14:16:52.068684542Z",
+        "Path": "./entrypoint.sh",
+        "Args": [
+            "run-node",
+            "start"
+        ],
+        "State": {
+            "Status": "running",
+            "Running": true,
+            "Paused": false,
+            "Restarting": false,
+            "OOMKilled": false,
+            "Dead": false,
+            "Pid": 27121,
+            "ExitCode": 0,
+            "Error": "",
+            "StartedAt": "2018-12-10T14:16:52.959152154Z",
+            "FinishedAt": "0001-01-01T00:00:00Z"
+        },
+        "Image": "sha256:33ac89e99c0dc9b4313480bae4ad4e53f1eb078024049e3a65b3b677dc5e32b5",
+        "ResolvConfPath": "/var/lib/docker/containers/05134be293fdca816e46a10500b898862ebf6f5df8f9bda80d73be9ee3b54626/resolv.conf",
+        "HostnamePath": "/var/lib/docker/containers/05134be293fdca816e46a10500b898862ebf6f5df8f9bda80d73be9ee3b54626/hostname",
+        "HostsPath": "/var/lib/docker/containers/05134be293fdca816e46a10500b898862ebf6f5df8f9bda80d73be9ee3b54626/hosts",
+        "LogPath": "/var/lib/docker/containers/05134be293fdca816e46a10500b898862ebf6f5df8f9bda80d73be9ee3b54626/05134be293fdca816e46a10500b898862ebf6f5df8f9bda80d73be9ee3b54626-json.log",
+        "Name": "/rise-node-main",
+        "RestartCount": 0,
+        "Driver": "overlay2",
+        "Platform": "linux",
+        "MountLabel": "",
+        "ProcessLabel": "",
+        "AppArmorProfile": "docker-default",
+        "ExecIDs": null,
+        "HostConfig": {
+            "Binds": null,
+            "ContainerIDFile": "",
+            "LogConfig": {
+                "Type": "json-file",
+                "Config": {}
+            },
+            "NetworkMode": "rise-network",
+            "PortBindings": {
+                "5555/tcp": [
+                    {
+                        "HostIp": "",
+                        "HostPort": "5555"
+                    }
+                ]
+            },
+            "RestartPolicy": {
+                "Name": "no",
+                "MaximumRetryCount": 0
+            },
+            "AutoRemove": true,
+            "VolumeDriver": "",
+            "VolumesFrom": null,
+            "CapAdd": null,
+            "CapDrop": null,
+            "Dns": [],
+            "DnsOptions": [],
+            "DnsSearch": [],
+            "ExtraHosts": null,
+            "GroupAdd": null,
+            "IpcMode": "shareable",
+            "Cgroup": "",
+            "Links": null,
+            "OomScoreAdj": 0,
+            "PidMode": "",
+            "Privileged": false,
+            "PublishAllPorts": false,
+            "ReadonlyRootfs": false,
+            "SecurityOpt": null,
+            "UTSMode": "",
+            "UsernsMode": "",
+            "ShmSize": 67108864,
+            "Runtime": "runc",
+            "ConsoleSize": [
+                0,
+                0
+            ],
+            "Isolation": "",
+            "CpuShares": 0,
+            "Memory": 0,
+            "NanoCpus": 0,
+            "CgroupParent": "",
+            "BlkioWeight": 0,
+            "BlkioWeightDevice": [],
+            "BlkioDeviceReadBps": null,
+            "BlkioDeviceWriteBps": null,
+            "BlkioDeviceReadIOps": null,
+            "BlkioDeviceWriteIOps": null,
+            "CpuPeriod": 0,
+            "CpuQuota": 0,
+            "CpuRealtimePeriod": 0,
+            "CpuRealtimeRuntime": 0,
+            "CpusetCpus": "",
+            "CpusetMems": "",
+            "Devices": [],
+            "DeviceCgroupRules": null,
+            "DiskQuota": 0,
+            "KernelMemory": 0,
+            "MemoryReservation": 0,
+            "MemorySwap": 0,
+            "MemorySwappiness": null,
+            "OomKillDisable": false,
+            "PidsLimit": 0,
+            "Ulimits": null,
+            "CpuCount": 0,
+            "CpuPercent": 0,
+            "IOMaximumIOps": 0,
+            "IOMaximumBandwidth": 0,
+            "Mounts": [
+                {
+                    "Type": "volume",
+                    "Source": "rise-node-main-data",
+                    "Target": "/home/rise/out/data"
+                },
+                {
+                    "Type": "volume",
+                    "Source": "rise-node-main-logs",
+                    "Target": "/home/rise/out/logs"
+                },
+                {
+                    "Type": "volume",
+                    "Source": "rise-node-main-modules",
+                    "Target": "/home/rise/out/src/node_modules"
+                },
+                {
+                    "Type": "volume",
+                    "Source": "rise-node-main-src-logs",
+                    "Target": "/home/rise/out/src/logs"
+                },
+                {
+                    "Type": "volume",
+                    "Source": "rise-node-main-nvm",
+                    "Target": "/home/rise/.nvm"
+                },
+                {
+                    "Type": "bind",
+                    "Source": "/tmp/rise_config_27020fiywW1W3gvVD",
+                    "Target": "/home/rise/out/etc"
+                }
+            ],
+            "MaskedPaths": [
+                "/proc/acpi",
+                "/proc/kcore",
+                "/proc/keys",
+                "/proc/latency_stats",
+                "/proc/timer_list",
+                "/proc/timer_stats",
+                "/proc/sched_debug",
+                "/proc/scsi",
+                "/sys/firmware"
+            ],
+            "ReadonlyPaths": [
+                "/proc/asound",
+                "/proc/bus",
+                "/proc/fs",
+                "/proc/irq",
+                "/proc/sys",
+                "/proc/sysrq-trigger"
+            ]
+        },
+        "GraphDriver": {
+            "Data": {
+                "LowerDir": "/var/lib/docker/overlay2/2d579259516bf17f9ea75e893f81f0956fcdc7e1e9bb09b6f534856a6c8060cc-init/diff:/var/lib/docker/overlay2/1acd18641e4baa4574290e6d2c02a2d489b1d4bebb4e118e7c9a19e5a6c29f38/diff:/var/lib/docker/overlay2/31a18cd35fc833c7644e2c8e9c66b9797a1a4657aa6848d8164027d92c5d6cbc/diff:/var/lib/docker/overlay2/8366ada5f6b5a3be0ffb9d31e49d867ec27ad3fa68215718095c5dc4b1155e4d/diff:/var/lib/docker/overlay2/0e0a07521c2049442a75b984c0c11929f201dbb8033cf3a4f97ce7f933913887/diff:/var/lib/docker/overlay2/39c383861e37306302ba7592d0cf0be25897f5967f9099c1c1ac757f5df41294/diff:/var/lib/docker/overlay2/b5fd2b8185844b25bdb521a0c5d310d0c6e1a0b5a2dac6729058564ccb9493e1/diff:/var/lib/docker/overlay2/048c6e62afe4bcda2eee9bdded7a2cc21d749c814c45585aa5291bddbb1c10e5/diff:/var/lib/docker/overlay2/bff2b946207c218abd54812aa933a9ae7693c03da2c49d6065a1cd837bab9221/diff:/var/lib/docker/overlay2/b0d8caf3d37fdeefd4aa86e38d4f4fe2d6e7bd3183dcab61084c67fdbc8a808a/diff:/var/lib/docker/overlay2/2628dddaa3669f6faaff801e56ebfbe3dc50212dfcffe8677a1efb7400afb189/diff:/var/lib/docker/overlay2/269e9945bc160f67838c23571a84db370eb69a126e8c0e5da5c397ea57fe5e48/diff:/var/lib/docker/overlay2/06652dbc12eb67be8a5c0f6d2c3262bb38abd90beab43e9b91564f350f93e4b5/diff:/var/lib/docker/overlay2/f5aa5f636b41a9f875bfe80cef2de29572c7809fd4df31527fb3be1288192da7/diff:/var/lib/docker/overlay2/667f5fac115e3dd96d913345bc7996e7f09bb5bd3ce5e2bc21e3889762f6e182/diff:/var/lib/docker/overlay2/4f4aa3c32b340b08ea8f872eec3a8dc5ade7e200315075783fbd05f1b561dd5f/diff:/var/lib/docker/overlay2/0a638ba1e9fa2b65919585bc6cb68170d82c62cb674a0dc634ba90378341a43b/diff:/var/lib/docker/overlay2/b0b7cdb45bd1ad2c2773b0289c3f1ebfcae9f96b7f405089c803e212a82a07eb/diff:/var/lib/docker/overlay2/364c764f33715efb26b16109f0f170442d743d25bccced364db4cb356fa43914/diff:/var/lib/docker/overlay2/e7c4e3c114374e79f6f5de29018ad3d050312f876d65086bb97641809b363bfe/diff:/var/lib/docker/overlay2/ba174dd92986769619c8c385739526ba541654977621becf9bc43c8071517a0c/diff:/var/lib/docker/overlay2/0c34ecb3d19e3eb2b376732a9b79a7013c1165aa85dfb61bd4370bcdc65d1e2b/diff:/var/lib/docker/overlay2/f3dcaa53c3e7d91aab4d17a59f24785179f3cb67b65bf468bf50bd799b686d0c/diff:/var/lib/docker/overlay2/0715af82c8384d1207442682ef9ec72c08c570d2ed62f1710d8ae6874353dae1/diff:/var/lib/docker/overlay2/186605268cd3aea1e51d6b76c11fe8e7880a1afdcfaf9495947051a9ee17b068/diff:/var/lib/docker/overlay2/0b30829903e8e609aec39f166db296a4a8561795bfd0565e984a24ea21d7e5a2/diff:/var/lib/docker/overlay2/330c1782b61b1d2dc285c0ee7e4d28ba0871ba08b2c987e8004d2533798df7c8/diff:/var/lib/docker/overlay2/10c21168bd7bf522117b0a50e0f154ae9349b5e3924211b8cca5038f10d7e459/diff:/var/lib/docker/overlay2/4e37f9d0be92f0e510ce9a8fcf0da4e567dbff89ab11214f8706bec69d0aad46/diff:/var/lib/docker/overlay2/b3834c333450a5f63faa609cbee6bccfe36e0646d39e839a2aa5edd41fd7eac6/diff:/var/lib/docker/overlay2/cdabc94452c5e4d4d01d7fd45b728b518cf3e11e84135d8e6134327896847fb8/diff:/var/lib/docker/overlay2/a09d4899062fd6ae8e3d64213db61147116d3996b11eaa160f65eff79331d9b3/diff:/var/lib/docker/overlay2/7b74057aa3612bcca34cb1043431a0d2b8834ba50fd96862227165a945baf12e/diff:/var/lib/docker/overlay2/12348f82910d5fd6141fc0f1bc7634129b6ec93cdb1289a6894f6c39c7fe0eda/diff:/var/lib/docker/overlay2/531b57c54a4fec5a6cf101ce96c8f54bc7783c7ad0f5f60f5247cd630a44295b/diff:/var/lib/docker/overlay2/cadfc05aa37f40e7f4b3d1b79d27384f10ffc7da365d7b9b8464d98389965193/diff:/var/lib/docker/overlay2/4b330fa05d187acdb505167f14be2a2cc0cd50cfd915487daebc4449794d4c80/diff:/var/lib/docker/overlay2/686c32537dfd9bdbf1a9e40f273c27aab4a83ba7ab4804b00bbc3f735adde6c9/diff:/var/lib/docker/overlay2/3251256264d92816cd12ac5de989c5549ee40efe68086d5c86d8c263834b048c/diff:/var/lib/docker/overlay2/362ce6036f43b91af76a655ef9e6ac3028564f56554c89e4ebe1bdf1abff3ec8/diff:/var/lib/docker/overlay2/ad9a27c6dd1fe166e55db84c2526465cc902f2ddaf713e6a264d69e4a7b27d37/diff:/var/lib/docker/overlay2/b6588858e9d1f4e76526a3190b23d41480774bd27eff32aed511b36e3818631e/diff:/var/lib/docker/overlay2/75bda896985226f6e13e454572000880ac0039301555240783f56b6a447c1153/diff:/var/lib/docker/overlay2/3ea513919c454e1d690405cc4ef092d739cd5ca7071b5200d425fab86fb785f3/diff:/var/lib/docker/overlay2/3f9827d63515d5c9e12ac08f949b73c03b493d765fc6709cca38c684312537b8/diff",
+                "MergedDir": "/var/lib/docker/overlay2/2d579259516bf17f9ea75e893f81f0956fcdc7e1e9bb09b6f534856a6c8060cc/merged",
+                "UpperDir": "/var/lib/docker/overlay2/2d579259516bf17f9ea75e893f81f0956fcdc7e1e9bb09b6f534856a6c8060cc/diff",
+                "WorkDir": "/var/lib/docker/overlay2/2d579259516bf17f9ea75e893f81f0956fcdc7e1e9bb09b6f534856a6c8060cc/work"
+            },
+            "Name": "overlay2"
+        },
+        "Mounts": [
+            {
+                "Type": "bind",
+                "Source": "/tmp/rise_config_27020fiywW1W3gvVD",
+                "Destination": "/home/rise/out/etc",
+                "Mode": "",
+                "RW": true,
+                "Propagation": "rprivate"
+            },
+            {
+                "Type": "volume",
+                "Name": "rise-node-main-data",
+                "Source": "/var/lib/docker/volumes/rise-node-main-data/_data",
+                "Destination": "/home/rise/out/data",
+                "Driver": "local",
+                "Mode": "z",
+                "RW": true,
+                "Propagation": ""
+            },
+            {
+                "Type": "volume",
+                "Name": "rise-node-main-logs",
+                "Source": "/var/lib/docker/volumes/rise-node-main-logs/_data",
+                "Destination": "/home/rise/out/logs",
+                "Driver": "local",
+                "Mode": "z",
+                "RW": true,
+                "Propagation": ""
+            },
+            {
+                "Type": "volume",
+                "Name": "rise-node-main-modules",
+                "Source": "/var/lib/docker/volumes/rise-node-main-modules/_data",
+                "Destination": "/home/rise/out/src/node_modules",
+                "Driver": "local",
+                "Mode": "z",
+                "RW": true,
+                "Propagation": ""
+            },
+            {
+                "Type": "volume",
+                "Name": "rise-node-main-src-logs",
+                "Source": "/var/lib/docker/volumes/rise-node-main-src-logs/_data",
+                "Destination": "/home/rise/out/src/logs",
+                "Driver": "local",
+                "Mode": "z",
+                "RW": true,
+                "Propagation": ""
+            },
+            {
+                "Type": "volume",
+                "Name": "rise-node-main-nvm",
+                "Source": "/var/lib/docker/volumes/rise-node-main-nvm/_data",
+                "Destination": "/home/rise/.nvm",
+                "Driver": "local",
+                "Mode": "z",
+                "RW": true,
+                "Propagation": ""
+            }
+        ],
+        "Config": {
+            "Hostname": "05134be293fd",
+            "Domainname": "",
+            "User": "rise",
+            "AttachStdin": false,
+            "AttachStdout": false,
+            "AttachStderr": false,
+            "ExposedPorts": {
+                "5555/tcp": {}
+            },
+            "Tty": false,
+            "OpenStdin": false,
+            "StdinOnce": false,
+            "Env": [
+                "LOCAL_GROUP_ID=1000",
+                "LOCAL_USER_ID=1000",
+                "PATH=/home/rise/postgres/bin:/home/rise/out/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+                "HOME=/home/rise",
+                "LANG=en_US.UTF-8",
+                "LANGUAGE=en_US:en",
+                "LC_ALL=en_US.UTF-8",
+                "NVM_DIR=/home/rise/.nvm",
+                "GLOBAL_NODE_DEPS=pm2     typescript     lerna     chokidar-cli     yarn",
+                "LD_LIBRARY_PATH=/home/rise/postgres/lib:/home/rise/out/lib:"
+            ],
+            "Cmd": [
+                "run-node",
+                "start"
+            ],
+            "Image": "rise-node:1.2.0",
+            "Volumes": null,
+            "WorkingDir": "/home/rise",
+            "Entrypoint": [
+                "./entrypoint.sh"
+            ],
+            "OnBuild": null,
+            "Labels": {}
+        },
+        "NetworkSettings": {
+            "Bridge": "",
+            "SandboxID": "4316ffb73ca3c6a1d5dd87a84d4ae3b093aa5fb1a86fdf895711916954dc9731",
+            "HairpinMode": false,
+            "LinkLocalIPv6Address": "",
+            "LinkLocalIPv6PrefixLen": 0,
+            "Ports": {
+                "5555/tcp": [
+                    {
+                        "HostIp": "0.0.0.0",
+                        "HostPort": "5555"
+                    }
+                ]
+            },
+            "SandboxKey": "/var/run/docker/netns/4316ffb73ca3",
+            "SecondaryIPAddresses": null,
+            "SecondaryIPv6Addresses": null,
+            "EndpointID": "",
+            "Gateway": "",
+            "GlobalIPv6Address": "",
+            "GlobalIPv6PrefixLen": 0,
+            "IPAddress": "",
+            "IPPrefixLen": 0,
+            "IPv6Gateway": "",
+            "MacAddress": "",
+            "Networks": {
+                "rise-network": {
+                    "IPAMConfig": null,
+                    "Links": null,
+                    "Aliases": [
+                        "05134be293fd"
+                    ],
+                    "NetworkID": "8ec95d1478e042d7382ef27311c2f8fa44d9716983dc18104e9aea4afcd1defd",
+                    "EndpointID": "573a8dc21b9027b24017c1dcca981f940fd52f60fee755b713092d046292f427",
+                    "Gateway": "172.29.0.1",
+                    "IPAddress": "172.29.0.2",
+                    "IPPrefixLen": 16,
+                    "IPv6Gateway": "",
+                    "GlobalIPv6Address": "",
+                    "GlobalIPv6PrefixLen": 0,
+                    "MacAddress": "02:42:ac:1d:00:02",
+                    "DriverOpts": null
+                }
+            }
+        }
+    }
+]

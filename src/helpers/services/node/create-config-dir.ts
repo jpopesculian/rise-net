@@ -3,7 +3,7 @@ import * as path from "path";
 import * as tmp from "tmp-promise";
 import { promisify } from "util";
 
-export const createConfigDir = async (): Promise<string> => {
+export const createConfigDir = async (preserve: boolean): Promise<string> => {
   const defaultConfigDir = path.join(
     __dirname,
     "..",
@@ -17,7 +17,7 @@ export const createConfigDir = async (): Promise<string> => {
   const tmpDir = (await tmp.dir({
     mode: 0o777,
     prefix: "rise_config_",
-    unsafeCleanup: true
+    unsafeCleanup: !preserve
   })).path;
   await promisify(ncp)(defaultConfigDir, tmpDir);
   return tmpDir;

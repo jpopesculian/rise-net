@@ -9,18 +9,23 @@ export default class NodeStop extends Command {
 
   static flags = {
     help: flags.help({ char: "h" }),
-    name: flags.string({
-      char: "n",
-      description: "Name of node",
+    id: flags.string({
+      char: "i",
+      description: "The identifier for the running node",
       default: ID
+    }),
+    remove: flags.boolean({
+      char: "r",
+      description: "Remove data and logs for container once stopped"
     })
   };
 
   async run() {
     const { flags } = this.parse(NodeStop);
-    cli.action.start(`Stopping node: ${flags.name}`);
+    const { id, ...restFlags } = flags;
+    cli.action.start(`Stopping node: ${id}`);
     try {
-      await stopNode(flags.name || ID);
+      await stopNode(id || ID, restFlags);
     } catch (e) {
       this.log(e);
     }

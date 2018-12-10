@@ -43,6 +43,10 @@ export default class NodeStart extends Command {
     entry: flags.string({
       char: "e",
       description: "Node entry for pm2"
+    }),
+    daemon: flags.boolean({
+      char: "d",
+      description: "Start node as daemon"
     })
   };
 
