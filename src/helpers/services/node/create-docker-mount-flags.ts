@@ -1,3 +1,4 @@
+import { setVolume } from "../../../db/node/volume";
 import {
   CONFIG,
   DATA,
@@ -16,6 +17,7 @@ import {
 } from "./namespace";
 
 export const createDockerMountFlags = (name: string, configDir: string) => {
+  setVolume(name, true);
   return `
     --mount "type=volume,src=${dataVolume(name)},dst=${DATA}"
     --mount "type=volume,src=${logVolume(name)},dst=${LOGS}"

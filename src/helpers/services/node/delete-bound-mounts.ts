@@ -3,20 +3,21 @@ import * as rimraf from "rimraf";
 import { promisify } from "util";
 
 import { CONFIG } from "../../constants/node/paths";
-import { shp } from "../../sh";
+
+import { inspectNodeContainer } from "./inspect-node-container";
 
 const deleteBoundMount = async ({ Source }: { Source: string }) => {
   return promisify(rimraf)(Source);
 };
 
 export const deleteBoundMounts = async (name: string) => {
-  const config = JSON.parse(
-    (await shp`docker container inspect "${name}"`).toString()
-  )[0];
   return Promise.all(
     map(
       deleteBoundMount,
-      filter({ Type: "bind", Destination: CONFIG }, config.Mounts)
+      filter(
+        { Type: "bind", Destination: CONFIG },
+        (await inspectNodeContainer(name)).Mounts
+      )
     )
   );
 };

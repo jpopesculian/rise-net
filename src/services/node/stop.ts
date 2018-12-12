@@ -1,8 +1,6 @@
 import { first } from "lodash";
 
-import {
-  deleteBoundMounts
-} from "../../helpers/services/node/delete-bound-mounts";
+import { deleteBoundMounts } from "../../helpers/services/node/delete-bound-mounts";
 import { prefixed } from "../../helpers/services/node/namespace";
 import { shp } from "../../helpers/sh";
 
@@ -20,8 +18,8 @@ export const stopNode = async (
   if (!containerId) {
     throw new Error("Node is not currently running");
   }
-  await deleteBoundMounts(containerId);
   await shp`docker container stop ${containerId}`;
+  await deleteBoundMounts(name);
   if (remove) {
     await resetNode(name);
   }

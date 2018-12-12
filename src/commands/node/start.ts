@@ -5,6 +5,7 @@ import {
   stripLatestVersion
 } from "../../helpers/commands/node/version";
 import { ID, NETWORK, PORT } from "../../helpers/constants/node/default-config";
+import { parseTestnetConfig } from "../../helpers/services/net/parse-testnet-config";
 import { startNode } from "../../services/node/start";
 
 export default class NodeStart extends Command {
@@ -47,14 +48,22 @@ export default class NodeStart extends Command {
     daemon: flags.boolean({
       char: "d",
       description: "Start node as daemon"
+    }),
+    testnet: flags.string({
+      char: "t",
+      description: 'Testnet config "network:accountsList:accountId"'
     })
   };
 
   async run() {
     const { flags } = this.parse(NodeStart);
-    const { id, version, ...restFlags } = flags;
+    const { id, version, testnet, ...restFlags } = flags;
+    if (id && testnet) {
+      this.warn("Node name will default to testnet config");
+    }
     await startNode(id || ID, {
       ...restFlags,
+      testnet: testnet ? parseTestnetConfig(testnet) : undefined,
       version: stripLatestVersion(version)
     });
   }
