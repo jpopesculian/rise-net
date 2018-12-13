@@ -1,14 +1,17 @@
 import { first } from "lodash";
 
+import { getRunning, setRunning } from "../../db/node/running";
+import { dummyLogger } from "../../helpers/logger";
 import { deleteBoundMounts } from "../../helpers/services/node/delete-bound-mounts";
 import { prefixed } from "../../helpers/services/node/namespace";
 import { shp } from "../../helpers/sh";
+import { ICommandFlags } from "../../helpers/types/command-flags";
 
 import { resetNode } from "./reset";
 
 export const stopNode = async (
   name: string,
-  { remove }: { remove: boolean }
+  { remove, logger = dummyLogger }: { remove: boolean } & ICommandFlags
 ) => {
   const containerId = first(
     (await shp`docker container ls -f name=${prefixed(name)} -aq`)
@@ -16,10 +19,13 @@ export const stopNode = async (
       .split(/\s+/g)
   );
   if (!containerId) {
-    throw new Error("Node is not currently running");
+    logger("Node is not currently running");
   }
-  await shp`docker container stop ${containerId}`;
   await deleteBoundMounts(name);
+  await shp`docker container stop ${containerId}`;
+  if (getRunning(name)) {
+    setRunning(name, false);
+  }
   if (remove) {
     await resetNode(name);
   }

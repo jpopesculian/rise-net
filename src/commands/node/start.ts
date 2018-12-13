@@ -1,10 +1,12 @@
 import { Command, flags } from "@oclif/command";
+import chalk from "chalk";
 
 import {
   LATEST_VERSION,
   stripLatestVersion
 } from "../../helpers/commands/node/version";
 import { ID, NETWORK, PORT } from "../../helpers/constants/node/default-config";
+import { networkNamed } from "../../helpers/services/net/namespace";
 import { parseTestnetConfig } from "../../helpers/services/net/parse-testnet-config";
 import { startNode } from "../../services/node/start";
 
@@ -49,21 +51,26 @@ export default class NodeStart extends Command {
       char: "d",
       description: "Start node as daemon"
     }),
-    testnet: flags.string({
+    devnet: flags.string({
       char: "t",
-      description: 'Testnet config "network:accountsList:accountId"'
+      description: 'Devnet config "network:accountsList:accountId"'
     })
   };
 
   async run() {
     const { flags } = this.parse(NodeStart);
-    const { id, version, testnet, ...restFlags } = flags;
-    if (id && testnet) {
-      this.warn("Node name will default to testnet config");
+    const { id, version, devnet, ...restFlags } = flags;
+    const testnet = devnet ? parseTestnetConfig(devnet) : undefined;
+    if (testnet) {
+      this.warn(
+        `Node name will default to devnet config: ${chalk.bold(
+          networkNamed(testnet)
+        )}`
+      );
     }
     await startNode(id || ID, {
       ...restFlags,
-      testnet: testnet ? parseTestnetConfig(testnet) : undefined,
+      testnet,
       version: stripLatestVersion(version)
     });
   }

@@ -1,12 +1,13 @@
 import { setList } from "../../db/accounts/list";
+import { setGenesis } from "../../db/net/genesis";
 import { ACCOUNT_NUM } from "../../helpers/constants/accounts/default-config";
 import { buildAccountsList } from "../../helpers/services/accounts/build-list";
 import { ICommandFlags } from "../../helpers/types/command-flags";
 
 interface IUtilsCreateAccountsFlags extends ICommandFlags {
-  id?: string,
-  totalNum?: number,
-  delegateNum?: number
+  id?: string;
+  totalNum?: number;
+  delegateNum?: number;
 }
 
 export const createAccounts = async (
@@ -17,4 +18,5 @@ export const createAccounts = async (
   }: IUtilsCreateAccountsFlags
 ): Promise<void> => {
   setList(id, buildAccountsList(totalNum, delegateNum));
+  setGenesis(id, {});
 };

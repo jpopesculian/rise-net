@@ -1,5 +1,5 @@
 import { EventEmitter } from "events";
-import { isEmpty, map, reject } from "lodash/fp";
+import { includes, isEmpty, map, reject } from "lodash/fp";
 
 import { getNodesWithNetwork } from "../../../db/node/network";
 import { NETWORK } from "../../constants/net/namespace";
@@ -10,9 +10,13 @@ interface IPeer {
   port: number;
 }
 export const peerListFromNetwork = async (
-  network: string
+  netName: string,
+  except?: string[]
 ): Promise<IPeer[]> => {
-  const nodes = getNodesWithNetwork(network);
+  let nodes = getNodesWithNetwork(netName);
+  if (except) {
+    nodes = reject(node => includes(node, except), nodes);
+  }
   EventEmitter.defaultMaxListeners = nodes.length * 10;
   return map(
     container => ({

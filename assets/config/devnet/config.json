@@ -3,15 +3,16 @@
     "address": "0.0.0.0",
     "version": "1.2.0",
     "fileLogLevel": "info",
-    "logFileName": "logs/lisk.log",
+    "logFileName": "logs/rise-master.log",
     "consoleLogLevel": "debug",
     "trustProxy": false,
+    "topAccounts": true,
     "cacheEnabled": false,
     "db": {
         "host": "localhost",
         "port": 5432,
-        "database": "test",
-        "user": "test",
+        "database": "rise_db",
+        "user": "rise",
         "password": "password",
         "poolSize": 95,
         "poolIdleTimeout": 30000,
@@ -22,7 +23,7 @@
     },
     "redis": {
         "host": "127.0.0.1",
-        "port": 6379,
+        "port": 6380,
         "db": 0,
         "password": null
     },
@@ -30,7 +31,7 @@
         "enabled": true,
         "access": {
             "public": true,
-            "whiteList": ["127.0.0.1"]
+            "whiteList": [ "127.0.0.1" ]
         },
         "restrictedWhiteList": [ "127.0.0.1" ],
         "options": {
@@ -75,8 +76,7 @@
     },
     "forging": {
         "force": false,
-        "secret": [
-        ],
+        "secret": [],
         "access": {
             "whiteList": [
                 "127.0.0.1",

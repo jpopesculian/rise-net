@@ -1,10 +1,12 @@
-import { filter, map } from "lodash/fp";
+import { includes, filter, map } from "lodash/fp";
 import * as rimraf from "rimraf";
 import { promisify } from "util";
 
-import { CONFIG } from "../../constants/node/paths";
+import { CONFIG, DEVNET } from "../../constants/node/paths";
 
 import { inspectNodeContainer } from "./inspect-node-container";
+
+const PATHS = [CONFIG, DEVNET];
 
 const deleteBoundMount = async ({ Source }: { Source: string }) => {
   return promisify(rimraf)(Source);
@@ -15,7 +17,7 @@ export const deleteBoundMounts = async (name: string) => {
     map(
       deleteBoundMount,
       filter(
-        { Type: "bind", Destination: CONFIG },
+        mount => mount.Type === "bind" && includes(mount.Destination, PATHS),
         (await inspectNodeContainer(name)).Mounts
       )
     )

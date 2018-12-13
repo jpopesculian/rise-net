@@ -22,11 +22,13 @@ cd ..
 config() {
     NETWORK_FILE="$(pwd)/etc/.network"
     if [ ! -f "$NETWORK_FILE" ]; then
-        [ "$NETWORK" ] || read -r -p "Which network do you want to run on? mainnet,testnet? (Default=mainnet): " NETWORK
+        [ "$NETWORK" ] || read -r -p "Which network do you want to run on? mainnet,testnet,devnet? (Default=mainnet): " NETWORK
         if [ "$NETWORK" == "mainnet" ] || [ "$NETWORK" == "" ]; then
             echo "mainnet" > ${NETWORK_FILE}
         elif [ "$NETWORK" == "testnet" ]; then
             echo "testnet" > ${NETWORK_FILE}
+        elif [ "$NETWORK" == "devnet" ]; then
+            echo "devnet" > ${NETWORK_FILE}
         else
             echo "Network is invalid"
             exit 2
@@ -36,6 +38,8 @@ config() {
         NETWORK="mainnet"
     elif [ "$(grep "testnet" "${NETWORK_FILE}")" ]; then
         NETWORK="testnet"
+    elif [ "$(grep "devnet" "${NETWORK_FILE}")" ]; then
+        NETWORK="devnet"
     else
         echo "$RX Network is invalid. Restart the script to reset."
         rm ${NETWORK_FILE}

@@ -1,13 +1,11 @@
-import { isEmpty } from "lodash/fp";
-
 import { getVolume, setVolume } from "../../db/node/volume";
 import { dummyLogger } from "../../helpers/logger";
+import { isRunning } from "../../helpers/services/node/is-running";
 import {
   dataVolume,
   logVolume,
   modulesVolume,
   nvmVolume,
-  prefixed,
   srcLogsVolume
 } from "../../helpers/services/node/namespace";
 import { shp } from "../../helpers/sh";
@@ -21,16 +19,9 @@ const removeVolume = async (
   try {
     await shp`docker volume rm ${volumeName}`;
     logger(`Removed ${label}`);
-    // tslint:disable-next-line no-unused
-  } catch (e) {
+  } catch {
     logger(`No ${label} to remove`);
   }
-};
-
-const isRunning = async (name: string) => {
-  return !isEmpty(
-    (await shp`docker ps -f "name=${prefixed(name)}" -q`).toString()
-  );
 };
 
 export const resetNode = async (
@@ -46,8 +37,7 @@ export const resetNode = async (
     await removeVolume(nvmVolume(name), "global modules", logger);
     await removeVolume(dataVolume(name), "data", logger);
   }
-  // if (getVolume(name)) {
-  //   setVolume(name, false);
-  // }
-  setVolume(name, true);
+  if (getVolume(name)) {
+    setVolume(name, false);
+  }
 };

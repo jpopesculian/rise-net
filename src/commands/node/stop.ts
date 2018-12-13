@@ -3,6 +3,7 @@ import cli from "cli-ux";
 
 import { ID } from "../../helpers/constants/node/default-config";
 import { stopNode } from "../../services/node/stop";
+import { stopAllNodes } from "../../services/node/stop-all";
 
 export default class NodeStop extends Command {
   static description = "Stop a running node";
@@ -17,15 +18,20 @@ export default class NodeStop extends Command {
     remove: flags.boolean({
       char: "r",
       description: "Remove data and logs for container once stopped"
+    }),
+    all: flags.boolean({
+      char: "a",
+      description: "Stop all running nodes"
     })
   };
 
   async run() {
     const { flags } = this.parse(NodeStop);
-    const { id, ...restFlags } = flags;
-    cli.action.start(`Stopping node: ${id}`);
+    const { id, all, ...restFlags } = flags;
+    const opts = { ...restFlags, logger: this.log };
+    cli.action.start(all ? "Stopping all nodes" : `Stopping node: ${id}`);
     try {
-      await stopNode(id || ID, restFlags);
+      await (all ? stopAllNodes(opts) : stopNode(id || ID, opts));
     } catch (e) {
       this.log(e);
     }
