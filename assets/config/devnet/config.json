@@ -2,7 +2,7 @@
     "port": 5555,
     "address": "0.0.0.0",
     "version": "1.2.0",
-    "fileLogLevel": "info",
+    "fileLogLevel": "trace",
     "logFileName": "logs/rise-master.log",
     "consoleLogLevel": "debug",
     "trustProxy": false,

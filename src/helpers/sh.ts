@@ -5,15 +5,16 @@ import * as _ from "lodash";
 import { cleanup } from "./cleanup";
 
 const commandArgs2Array = (cmd: string): string[] => {
-  return (cmd.match(
-    /("[^"\\]*(?:\\[\S\s][^"\\]*)*"|'[^'\\]*(?:\\[\S\s][^'\\]*)*'|\/[^\/\\]*(?:\\[\S\s][^\/\\]*)*\/[gimy]*(?=\s|$)|(?:\\\s|\S)+)/g
-  ) || [])
-    .map(arg => {
-      if (arg[0] === '"' && arg[arg.length - 1] === '"') {
-        return arg.slice(1, arg.length - 1);
-      }
-      return arg;
-    });
+  return (
+    cmd.match(
+      /("[^"\\]*(?:\\[\S\s][^"\\]*)*"|'[^'\\]*(?:\\[\S\s][^'\\]*)*'|\/[^\/\\]*(?:\\[\S\s][^\/\\]*)*\/[gimy]*(?=\s|$)|(?:\\\s|\S)+)/g
+    ) || []
+  ).map(arg => {
+    if (arg[0] === '"' && arg[arg.length - 1] === '"') {
+      return arg.slice(1, arg.length - 1);
+    }
+    return arg;
+  });
 };
 
 const parseCommand = (
@@ -92,7 +93,7 @@ export const shp = (
       if (isSuccess(code)) {
         return resolve(buffer);
       }
-      return reject(new Error("Exit with error code: " + code));
+      return reject(new Error(`Exit with error code: ${code}`));
     });
   });
 };
