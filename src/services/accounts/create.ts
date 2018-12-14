@@ -1,4 +1,4 @@
-import { setList } from "../../db/accounts/list";
+import { setAccounts } from "../../db/accounts/list";
 import { setGenesis } from "../../db/net/genesis";
 import { ACCOUNT_NUM } from "../../helpers/constants/accounts/default-config";
 import { buildAccountsList } from "../../helpers/services/accounts/build-list";
@@ -17,6 +17,6 @@ export const createAccounts = async (
     delegateNum = ACCOUNT_NUM
   }: IUtilsCreateAccountsFlags
 ): Promise<void> => {
-  setList(id, buildAccountsList(totalNum, delegateNum));
-  setGenesis(id, {});
+  await setAccounts(id, buildAccountsList(totalNum, delegateNum));
+  await setGenesis(id, {});
 };

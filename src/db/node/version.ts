@@ -4,10 +4,10 @@ import { getKey } from "./namespace";
 
 const VERSION = "version";
 
-export const setVersion = (name: string, version: string) => {
-  return db.set(`${getKey(name)}.${VERSION}`, version).write();
+export const setVersion = async (name: string, version: string) => {
+  return (await db()).set(`${getKey(name)}.${VERSION}`, version).write();
 };
 
-export const getVersion = (name: string): string => {
-  return db.get(`${getKey(name)}.${VERSION}`).value();
+export const getVersion = async (name: string): Promise<string> => {
+  return (await db()).get(`${getKey(name)}.${VERSION}`).value();
 };

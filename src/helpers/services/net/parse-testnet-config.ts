@@ -1,6 +1,6 @@
 import { isEmpty, isNumber } from "lodash/fp";
 
-import { getList } from "../../../db/accounts/list";
+import { getAccounts } from "../../../db/accounts/list";
 import { getGenesis } from "../../../db/net/genesis";
 import { ITestNetConfig } from "../../types/testnet-config";
 
@@ -17,8 +17,8 @@ const validDevnetConfig = async ({
 }: ITestNetConfig) => {
   return (
     !isEmpty(netName) &&
-    !isEmpty(getList(accountsListId)) &&
-    !isEmpty(getGenesis(accountsListId)) &&
+    !isEmpty(await getAccounts(accountsListId)) &&
+    !isEmpty(await getGenesis(accountsListId)) &&
     isNumber(delegateId)
   );
 };

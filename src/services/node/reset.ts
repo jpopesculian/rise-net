@@ -37,7 +37,7 @@ export const resetNode = async (
     await removeVolume(nvmVolume(name), "global modules", logger);
     await removeVolume(dataVolume(name), "data", logger);
   }
-  if (getVolume(name)) {
-    setVolume(name, false);
+  if (await getVolume(name)) {
+    await setVolume(name, false);
   }
 };

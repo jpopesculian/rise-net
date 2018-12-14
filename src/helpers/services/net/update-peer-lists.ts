@@ -38,6 +38,6 @@ export const updatePeerLists = async (testnet: ITestNetConfig) => {
   const { netName } = testnet;
   map(
     node => updatePeerListForNode(testnet, node),
-    getNodesWithNetwork(netName)
+    await getNodesWithNetwork(netName)
   );
 };

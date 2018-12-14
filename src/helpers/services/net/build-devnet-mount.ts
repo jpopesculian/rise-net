@@ -20,7 +20,7 @@ const buildConfigJson = async ({
     __dirname,
     "../../../../assets/config/devnet/config.json"
   ));
-  const account = getAccount(accountsListId, delegateId);
+  const account = await getAccount(accountsListId, delegateId);
   if (account) {
     config.forging.secret = [account.passphrase];
   }
@@ -43,8 +43,8 @@ export const buildDevnetMount = async (
   );
   writeFileSync(
     path.join(tmpDir, "genesisBlock.json"),
-    JSON.stringify(getGenesis(testnet.accountsListId))
+    JSON.stringify(await getGenesis(testnet.accountsListId))
   );
-  setNetwork(networkNamed(testnet), testnet.netName);
+  await setNetwork(await networkNamed(testnet), testnet.netName);
   return `--mount "type=bind,src=${tmpDir},dst=${DEVNET}"`;
 };

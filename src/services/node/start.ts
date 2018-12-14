@@ -47,14 +47,14 @@ export const startNode = async (
     src
   }: INodeStartFlags
 ): Promise<number> => {
-  name = testnet ? networkNamed(testnet) : name;
+  name = testnet ? await networkNamed(testnet) : name;
   const hasSrc = !isEmpty(src);
   version = await initContainerImage(name, version);
 
   if (testnet && !daemon) {
     waitUntilRunning(name).then(() => updatePeerLists(testnet));
   }
-  setRunning(name, !daemon);
+  await setRunning(name, !daemon);
   let exitCode = 1;
   try {
     exitCode = await sh`docker run --rm
@@ -68,7 +68,7 @@ export const startNode = async (
             ? `--mount "type=bind,src=${toAbsolutePath(src!)},dst=${SRC}"`
             : ""
         }
-        ${createDockerMountFlags(
+        ${await createDockerMountFlags(
           name,
           await buildConfigDir({
             network: testnet ? "devnet" : network,
@@ -83,7 +83,7 @@ export const startNode = async (
         run-node ${hasSrc ? "dev" : "start"} ${watch ? "--watch" : ""}`;
     // bash`;
   } finally {
-    setRunning(name, !!daemon);
+    await setRunning(name, !!daemon);
     if (testnet) {
       updatePeerLists(testnet);
     }

@@ -27,11 +27,11 @@ export const initContainerImage = async (
   version?: string
 ): Promise<string> => {
   if (!version) {
-    version = getVersion(name) || VERSION;
+    version = (await getVersion(name)) || VERSION;
   }
-  if (!await hasVersionImage(version)) {
+  if (!(await hasVersionImage(version))) {
     await buildNode(version);
   }
-  setVersion(name, version);
+  await setVersion(name, version);
   return version;
 };

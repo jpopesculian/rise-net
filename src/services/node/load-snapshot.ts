@@ -5,12 +5,8 @@ import { DOWNLOADS } from "../../helpers/constants/node/paths";
 import { SNAPSHOT } from "../../helpers/constants/node/url";
 import { download } from "../../helpers/download";
 import { buildConfigDir } from "../../helpers/services/node/build-config-dir";
-import {
-  buildDownloadsDir
-} from "../../helpers/services/node/build-downloads-dir";
-import {
-  createDockerMountFlags
-} from "../../helpers/services/node/create-docker-mount-flags";
+import { buildDownloadsDir } from "../../helpers/services/node/build-downloads-dir";
+import { createDockerMountFlags } from "../../helpers/services/node/create-docker-mount-flags";
 import {
   imageName,
   initContainerImage
@@ -20,10 +16,10 @@ import { sh } from "../../helpers/sh";
 import { ICommandFlags } from "../../helpers/types/command-flags";
 
 interface ILoadSnapshotFlags extends ICommandFlags {
-  network?: string,
-  file?: string,
-  name?: string,
-  version?: string
+  network?: string;
+  file?: string;
+  name?: string;
+  version?: string;
 }
 
 export const loadSnapshot = async ({
@@ -38,7 +34,7 @@ export const loadSnapshot = async ({
   version = await initContainerImage(name, version);
   return sh`docker run -it --rm
     --name "${prefixed(name)}"
-    ${createDockerMountFlags(name, await buildConfigDir({ network }))}
+    ${await createDockerMountFlags(name, await buildConfigDir({ network }))}
     --mount "type=bind,src=${await buildDownloadsDir(file)},dst=${DOWNLOADS}"
     ${imageName(version)}
     manager restoreBackup ${DOWNLOADS}/snapshot.gz`;

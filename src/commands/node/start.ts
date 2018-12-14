@@ -64,7 +64,7 @@ export default class NodeStart extends Command {
     if (testnet) {
       this.warn(
         `Node name will default to devnet config: ${chalk.bold(
-          networkNamed(testnet)
+          await networkNamed(testnet)
         )}`
       );
     }

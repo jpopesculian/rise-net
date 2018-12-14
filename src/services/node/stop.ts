@@ -23,8 +23,8 @@ export const stopNode = async (
   }
   await deleteBoundMounts(name);
   await shp`docker container stop ${containerId}`;
-  if (getRunning(name)) {
-    setRunning(name, false);
+  if (await getRunning(name)) {
+    await setRunning(name, false);
   }
   if (remove) {
     await resetNode(name);

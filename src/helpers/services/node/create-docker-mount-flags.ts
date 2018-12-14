@@ -16,8 +16,11 @@ import {
   srcLogsVolume
 } from "./namespace";
 
-export const createDockerMountFlags = (name: string, configDir: string) => {
-  setVolume(name, true);
+export const createDockerMountFlags = async (
+  name: string,
+  configDir: string
+) => {
+  await setVolume(name, true);
   return `
     --mount "type=volume,src=${dataVolume(name)},dst=${DATA}"
     --mount "type=volume,src=${logVolume(name)},dst=${LOGS}"

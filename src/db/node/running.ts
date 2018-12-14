@@ -1,23 +1,26 @@
+import { first } from "lodash/fp";
+
 import { db } from "../db";
 
 import { getKey } from "./namespace";
 
 const RUNNING = "running";
 
-export const setRunning = (name: string, running: boolean) => {
-  return db.set(`${getKey(name)}.${RUNNING}`, running).write();
+export const setRunning = async (name: string, running: boolean) => {
+  return (await db()).set(`${getKey(name)}.${RUNNING}`, running).write();
 };
 
-export const getRunning = (name: string): string => {
-  return db.get(`${getKey(name)}.${RUNNING}`).value();
+export const getRunning = async (name: string): Promise<string> => {
+  return (await db()).get(`${getKey(name)}.${RUNNING}`).value();
 };
 
-export const getNodesWithRunning = (): string[] => {
-  return db
+export const getNodesWithRunning = async (): Promise<string[]> => {
+  return (await db())
     .get(getKey())
-    .keys()
-    .filter(k => {
-      return db.get(getKey(k)).value()[RUNNING];
+    .entries()
+    .filter(([, node]: [string, any]) => {
+      return !!node[RUNNING];
     })
-    .value() as string[];
+    .map(first)
+    .value();
 };

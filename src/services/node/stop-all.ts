@@ -7,12 +7,9 @@ import { dummyLogger } from "../../helpers/logger";
 import { stopNode } from "./stop";
 
 export const stopAllNodes = async (opts: { remove: boolean }) => {
-  const nodes = getNodesWithRunning();
+  const nodes = await getNodesWithRunning();
   EventEmitter.defaultMaxListeners = nodes.length * 10;
   return Promise.all(
-    map(
-      node => stopNode(node.toString(), { ...opts, logger: dummyLogger }),
-      nodes
-    )
+    map(node => stopNode(node, { ...opts, logger: dummyLogger }), nodes)
   );
 };

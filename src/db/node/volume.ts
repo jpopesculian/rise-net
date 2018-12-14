@@ -1,23 +1,26 @@
+import { first } from "lodash/fp";
+
 import { db } from "../db";
 
 import { getKey } from "./namespace";
 
 const VOLUME = "volume";
 
-export const setVolume = (name: string, volume: boolean) => {
-  return db.set(`${getKey(name)}.${VOLUME}`, volume).write();
+export const setVolume = async (name: string, volume: boolean) => {
+  return (await db()).set(`${getKey(name)}.${VOLUME}`, volume).write();
 };
 
-export const getVolume = (name: string): string => {
-  return db.get(`${getKey(name)}.${VOLUME}`).value();
+export const getVolume = async (name: string): Promise<string> => {
+  return (await db()).get(`${getKey(name)}.${VOLUME}`).value();
 };
 
-export const getNodesWithVolume = (): string[] => {
-  return db
+export const getNodesWithVolume = async (): Promise<string[]> => {
+  return (await db())
     .get(getKey())
-    .keys()
-    .filter(k => {
-      return db.get(getKey(k)).value()[VOLUME];
+    .entries()
+    .filter(([, node]: [string, any]) => {
+      return !!node[VOLUME];
     })
-    .value() as string[];
+    .map(first)
+    .value();
 };

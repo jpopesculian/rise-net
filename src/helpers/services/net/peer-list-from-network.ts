@@ -13,7 +13,7 @@ export const peerListFromNetwork = async (
   netName: string,
   except?: string[]
 ): Promise<IPeer[]> => {
-  let nodes = getNodesWithNetwork(netName);
+  let nodes = await getNodesWithNetwork(netName);
   if (except) {
     nodes = reject(node => includes(node, except), nodes);
   }

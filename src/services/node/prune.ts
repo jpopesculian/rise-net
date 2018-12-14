@@ -6,7 +6,7 @@ import { getNodesWithVolume } from "../../db/node/volume";
 import { resetNode } from "./reset";
 
 export const pruneNodes = async () => {
-  const nodes = getNodesWithVolume();
+  const nodes = await getNodesWithVolume();
   EventEmitter.defaultMaxListeners = nodes.length * 10;
-  return Promise.all(map(node => resetNode(node.toString()), nodes));
+  return Promise.all(map(node => resetNode(node), nodes));
 };
