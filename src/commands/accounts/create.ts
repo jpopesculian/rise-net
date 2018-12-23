@@ -31,8 +31,8 @@ export default class AccountsCreate extends Command {
 
   async run() {
     const { flags } = this.parse(AccountsCreate);
-    const { id, ...restFlags } = flags;
-    await createAccounts(id || ID, restFlags);
-    await listAccounts(id || ID, { logger: this.log });
+    const { id = ID, ...restFlags } = flags;
+    await createAccounts(id, restFlags);
+    await listAccounts(id, { logger: this.log });
   }
 }

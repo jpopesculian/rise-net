@@ -17,8 +17,8 @@ export default class GetGenesis extends Command {
 
   async run() {
     const { flags } = this.parse(GetGenesis);
-    const { id } = flags;
-    const genesisBlock = await getGenesis(id || ID);
+    const { id = ID } = flags;
+    const genesisBlock = await getGenesis(id);
     if (genesisBlock) {
       this.log(JSON.stringify(genesisBlock, null, 4));
     } else {

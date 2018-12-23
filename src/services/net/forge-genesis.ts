@@ -31,6 +31,6 @@ export const forgeGenesis = async (
     totalAmount
   );
   const genesisBlock = await generateGenesisBlock(transactions, genesisAccount);
-  setGenesis(id, genesisBlock);
+  await setGenesis(id, genesisBlock);
   return genesisBlock;
 };

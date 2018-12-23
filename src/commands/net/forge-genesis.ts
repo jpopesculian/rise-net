@@ -24,9 +24,9 @@ export default class ForgeGenesis extends Command {
 
   async run() {
     const { flags } = this.parse(ForgeGenesis);
-    const { id, ...restFlags } = flags;
+    const { id = ID, ...restFlags } = flags;
     cli.action.start(`Generating genesis block: ${id}`);
-    const genesisBlock = await forgeGenesis(id || ID, restFlags);
+    const genesisBlock = await forgeGenesis(id, restFlags);
     this.log(JSON.stringify(genesisBlock, null, 4));
     cli.action.stop();
   }
