@@ -2,6 +2,10 @@ import { isEmpty } from "lodash/fp";
 
 import { IAccount } from "../../types/accounts";
 
+export const GENESIS = "genesis";
+export const DELEGATE = "delegate";
+export const USER = "user";
+
 export const isGenesis = (account: IAccount) => account.genesis;
 
 export const isDelegate = (account: IAccount) =>
@@ -13,9 +17,9 @@ export const isNormal = (account: IAccount) =>
 export const typeString = (account: IAccount) => {
   switch (true) {
     case isGenesis(account):
-      return "genesis";
+      return GENESIS;
     case isDelegate(account):
-      return "delegate";
+      return DELEGATE;
   }
-  return "user";
+  return USER;
 };
