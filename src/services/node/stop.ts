@@ -1,4 +1,4 @@
-import { first } from "lodash";
+import { first, isEmpty } from "lodash";
 
 import { getRunning, setRunning } from "../../db/node/running";
 import { dummyLogger } from "../../helpers/logger";
@@ -18,11 +18,12 @@ export const stopNode = async (
       .toString()
       .split(/\s+/g)
   );
-  if (!containerId) {
+  if (!containerId || isEmpty(containerId)) {
     logger("Node is not currently running");
+  } else {
+    await deleteBoundMounts(name);
+    await shp`docker container stop ${containerId}`;
   }
-  await deleteBoundMounts(name);
-  await shp`docker container stop ${containerId}`;
   if (await getRunning(name)) {
     await setRunning(name, false);
   }

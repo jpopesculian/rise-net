@@ -59,7 +59,7 @@ export default class NodeStart extends Command {
 
   async run() {
     const { flags } = this.parse(NodeStart);
-    const { id, version, devnet, ...restFlags } = flags;
+    const { id, version, devnet, daemon, ...restFlags } = flags;
     const testnet = devnet ? parseTestnetConfig(devnet) : undefined;
     if (testnet) {
       this.warn(
@@ -71,7 +71,11 @@ export default class NodeStart extends Command {
     await startNode(id || ID, {
       ...restFlags,
       testnet,
+      daemon,
       version: stripLatestVersion(version)
     });
+    this.log(
+      daemon ? "Node started successfully!" : "Node stopped successfully!"
+    );
   }
 }

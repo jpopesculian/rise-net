@@ -16,19 +16,14 @@ import {
 } from "../../helpers/services/node/image-version";
 import { waitUntilRunning } from "../../helpers/services/node/is-running";
 import { prefixed } from "../../helpers/services/node/namespace";
-import { sh } from "../../helpers/sh";
+import { sh, shp } from "../../helpers/sh";
 import { toAbsolutePath } from "../../helpers/to-absolute-path";
-import { ICommandFlags } from "../../helpers/types/command-flags";
+import { IStartCommandFlags } from "../../helpers/types/start-command-flags";
 import { ITestNetConfig } from "../../helpers/types/testnet-config";
 
-interface INodeStartFlags extends ICommandFlags {
+interface INodeStartFlags extends IStartCommandFlags {
   port?: number;
-  configFile?: string;
   network?: string;
-  version?: string;
-  watch?: boolean;
-  src?: string;
-  entry?: string;
   daemon?: boolean;
   testnet?: ITestNetConfig;
 }
@@ -46,7 +41,7 @@ export const startNode = async (
     testnet,
     src
   }: INodeStartFlags
-): Promise<number> => {
+): Promise<string | number> => {
   name = testnet ? await networkNamed(testnet) : name;
   const hasSrc = !isEmpty(src);
   version = await initContainerImage(name, version);
@@ -55,9 +50,9 @@ export const startNode = async (
     waitUntilRunning(name).then(() => updatePeerLists(testnet));
   }
   await setRunning(name, !daemon);
-  let exitCode = 1;
+  let output = null;
   try {
-    exitCode = await sh`docker run --rm
+    output = await (daemon ? shp : sh)`docker run --rm
         ${daemon ? "-d" : "-it"}
         -p ${port}:${PORT}
         --name "${prefixed(name)}"
@@ -88,5 +83,5 @@ export const startNode = async (
       updatePeerLists(testnet);
     }
   }
-  return exitCode;
+  return daemon ? (output as Buffer).toString() : (output as number);
 };

@@ -11,6 +11,7 @@ export const createConfigDir = async (preserve: boolean): Promise<string> => {
     "..",
     "..",
     "docker",
+    "dev",
     "build-assets",
     "etc"
   );
