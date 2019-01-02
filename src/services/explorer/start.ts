@@ -10,7 +10,7 @@ import { attachRedisContainer } from "../../helpers/services/explorer/attach-red
 import { findOrCreateNetwork } from "../../helpers/services/explorer/find-or-create-network";
 import { findOrDownloadImage } from "../../helpers/services/explorer/find-or-download-image";
 import { waitUntilRunning } from "../../helpers/services/explorer/is-running";
-import { shp } from "../../helpers/sh";
+import { sh, shp } from "../../helpers/sh";
 import { ICommandFlags } from "../../helpers/types/command-flags";
 
 interface IExplorerCommandFlags extends ICommandFlags {
@@ -37,7 +37,7 @@ export const startExplorer = async ({
     --network=${await findOrCreateNetwork()}
     -d ${await findOrDownloadImage(EXPLORER_IMAGE)}`;
   await waitUntilRunning();
-  await shp`docker exec -it ${EXPLORER}
+  await sh`docker exec -it ${EXPLORER}
     /home/lisk/lisk-explorer/node_modules/grunt/bin/grunt
     candles:build`;
 };

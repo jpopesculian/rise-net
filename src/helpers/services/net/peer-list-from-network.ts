@@ -1,4 +1,3 @@
-import { EventEmitter } from "events";
 import { includes, isEmpty, map, reject } from "lodash/fp";
 
 import { getNodesWithNetwork } from "../../../db/node/network";
@@ -17,7 +16,6 @@ export const peerListFromNetwork = async (
   if (except) {
     nodes = reject(node => includes(node, except), nodes);
   }
-  EventEmitter.defaultMaxListeners = nodes.length * 10;
   return map(
     container => ({
       ip: container.NetworkSettings.Networks[NETWORK].IPAddress,

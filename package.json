@@ -69,7 +69,10 @@
     "bin": "rise-net",
     "plugins": [
       "@oclif/plugin-help"
-    ]
+    ],
+    "hooks": {
+      "init": "./lib/hooks/init/default-max-listeners"
+    }
   },
   "repository": "jpopesculian/rise-net",
   "scripts": {

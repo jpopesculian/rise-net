@@ -1,4 +1,3 @@
-import { EventEmitter } from "events";
 import { map, max, range, sample } from "lodash/fp";
 
 import { getAccounts } from "../../db/accounts/list";
@@ -28,7 +27,6 @@ export const startNet = async (
     ...restFlags
   }: IStartNetFlags
 ) => {
-  EventEmitter.defaultMaxListeners = 0;
   const userAccountRange = map("id", await getAccounts(id, isNormal));
   const maxAccountId = max(map("id", await getAccounts(id)));
   num = num || (await getAccounts(id, isDelegate)).length;
@@ -52,6 +50,8 @@ export const startNet = async (
   }, range(0, num));
   for (const { num, ...config } of configs) {
     await startNode(label, config);
-    logger(`${label} node #${num} started successfully!`);
+    logger(
+      `${label} node #${num} started successfully on port ${config.port}!`
+    );
   }
 };
