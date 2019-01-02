@@ -1,4 +1,4 @@
-import { NODE, PORT } from "../../helpers/constants/explorer/default-config";
+import { PORT } from "../../helpers/constants/explorer/default-config";
 import { EXPLORER_IMAGE } from "../../helpers/constants/explorer/images";
 import {
   EXPLORER,
@@ -10,19 +10,21 @@ import { attachRedisContainer } from "../../helpers/services/explorer/attach-red
 import { findOrCreateNetwork } from "../../helpers/services/explorer/find-or-create-network";
 import { findOrDownloadImage } from "../../helpers/services/explorer/find-or-download-image";
 import { waitUntilRunning } from "../../helpers/services/explorer/is-running";
+import { findOrCreateNetwork as findOrCreateNodeNetwork } from "../../helpers/services/net/find-or-create-network";
 import { sh, shp } from "../../helpers/sh";
 import { ICommandFlags } from "../../helpers/types/command-flags";
 
 interface IExplorerCommandFlags extends ICommandFlags {
   port?: number;
-  node?: string;
+  nodeHost: string;
+  nodePort: number;
 }
 
 export const startExplorer = async ({
   port = PORT,
-  node = NODE
+  nodeHost,
+  nodePort
 }: IExplorerCommandFlags) => {
-  const [nodeHost, nodePort] = node.split(":");
   await attachRedisContainer();
   await attachGeoipContainer();
   await shp`docker run
@@ -37,6 +39,7 @@ export const startExplorer = async ({
     --network=${await findOrCreateNetwork()}
     -d ${await findOrDownloadImage(EXPLORER_IMAGE)}`;
   await waitUntilRunning();
+  await shp`docker network connect ${await findOrCreateNodeNetwork()} ${EXPLORER}`;
   await sh`docker exec -it ${EXPLORER}
     /home/lisk/lisk-explorer/node_modules/grunt/bin/grunt
     candles:build`;
